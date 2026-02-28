@@ -124,7 +124,7 @@
             will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            transform: translateZ(0);
+            transform: translateZ(0); /* фиксируем слой, без смещения */
         }
         .matte-overlay {
             position: fixed;
@@ -591,7 +591,7 @@
         <div class="loader-text">APOGEE SHELL</div>
     </div>
 
-    <!-- Фоновая структура — бесконечная сетка правильных шестиугольников (как соты) с параллаксом -->
+    <!-- Фоновая структура — бесконечная сетка правильных шестиугольников (как соты) без параллакса, фиксированная -->
     <svg id="structure-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice">
         <defs>
             <!-- Паттерн гексагональной сетки (пчелиные соты, flat-top) с правильными пропорциями -->
@@ -781,25 +781,7 @@
             window.addEventListener('resize', updateViewportHeight);
             window.addEventListener('orientationchange', function() { setTimeout(updateViewportHeight, 100); });
 
-            // Параллакс для фона — с использованием throttle через requestAnimationFrame
-            const bg = document.getElementById('structure-bg');
-            let ticking = false;
-            function updateParallax() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        if (bg) {
-                            const scrollY = window.scrollY;
-                            const speed = 0.2;
-                            bg.style.transform = `translateY(${scrollY * speed}px)`;
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-            window.addEventListener('scroll', updateParallax, { passive: true });
-            // Запускаем один раз для начальной позиции
-            updateParallax();
+            // Фон больше не двигается — удаляем параллакс (оставляем фиксированным)
 
             // Переключение языка
             window.setLanguage = function(lang) {

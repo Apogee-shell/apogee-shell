@@ -1,25 +1,32 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>APOGEE SHELL | Advanced Materials R&D</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
 
     <style>
+        /* === Новая цветовая схема (инженерный минимализм) === */
         :root {
-            --bg: #ffffff;
-            --fg: #000000;
-            --accent: #555555;
-            --border: rgba(0,0,0,0.15);
-            --glass: rgba(255, 255, 255, 0.9);
-            --transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-            --primary: #000000;
-            --secondary: #333333;
-            --muted: #777777;
+            --bg: #fdf8f2;                /* молочный / крафтовая бумага */
+            --fg: #1e1b17;                 /* почти чёрный с тёплым оттенком */
+            --accent-brown: #8D7B68;       /* основной коричневый */
+            --soft-beige: #F1DEC9;          /* пастельный фон блоков */
+            --structure-line: #111111;      /* чёрные линии */
+            --border: rgba(141, 123, 104, 0.25);
+            --glass: rgba(253, 248, 242, 0.85);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --primary: #5f4e3c;
+            --secondary: #7b6b5b;
+            --muted: #b5a89b;
             --vh: 1vh;
+            --weight-body: 500;
+            --weight-bold: 700;
+            --weight-bolder: 800;
+            --weight-extra: 900;
         }
 
         * {
@@ -34,13 +41,13 @@
             overflow-x: hidden;
             height: 100%;
             width: 100%;
-            position: fixed;
         }
 
         body {
             background-color: var(--bg);
             color: var(--fg);
             font-family: 'Inter', "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-weight: var(--weight-body);
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -53,6 +60,72 @@
             position: relative;
         }
 
+        /* === Арабская RTL-версия === */
+        body[dir="rtl"] {
+            font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+            text-align: right;
+        }
+        body[dir="rtl"] .lang-switch {
+            border-left: none;
+            border-right: 2px solid var(--border);
+            padding-left: 0;
+            padding-right: 15px;
+        }
+        body[dir="rtl"] nav {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] .roadmarker {
+            align-items: flex-start;
+            text-align: left;
+            padding-right: 0;
+            padding-left: 3.5rem;
+        }
+        body[dir="rtl"] .roadmap-dot {
+            right: auto;
+            left: -12px;
+        }
+        body[dir="rtl"] .roadmap-content {
+            border-left: none;
+            border-right: 2px solid transparent;
+            padding-left: 0;
+            padding-right: 2rem;
+        }
+        body[dir="rtl"] .roadmap-item:hover .roadmap-content {
+            border-right-color: var(--accent-brown);
+        }
+        body[dir="rtl"] .info-card {
+            border-left: none;
+            border-right: 4px solid var(--fg);
+        }
+        @media (max-width: 768px) {
+            body[dir="rtl"] .roadmarker {
+                padding-left: 0;
+                padding-right: 2.2rem;
+            }
+            body[dir="rtl"] .roadmap-dot {
+                left: auto;
+                right: 0;
+            }
+            body[dir="rtl"] .roadmap-content {
+                padding-right: 2.2rem;
+            }
+        }
+
+        /* === Фоновая структура — бесконечная сетка правильных шестиугольников (как соты) === */
+        #structure-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+            pointer-events: none;
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+        }
         .matte-overlay {
             position: fixed;
             top: 0;
@@ -60,28 +133,11 @@
             width: 100%;
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(2.5px) saturate(1.8) brightness(0.97);
-            -webkit-backdrop-filter: blur(2.5px) saturate(1.8) brightness(0.97);
+            background: rgba(253, 248, 242, 0.4);
+            backdrop-filter: blur(1.5px) saturate(1.2);
+            -webkit-backdrop-filter: blur(1.5px) saturate(1.2);
             pointer-events: none;
             z-index: 0;
-            will-change: transform;
-            transform: translateZ(0);
-        }
-
-        #canvas-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
-            z-index: -1;
-            opacity: 0.8;
-            will-change: transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
         }
 
         header {
@@ -102,15 +158,14 @@
         }
 
         .logo {
-            font-weight: 900;
+            font-weight: var(--weight-extra);
             font-size: 1.2rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             white-space: nowrap;
-            overflow: visible;
-            text-overflow: clip;
             flex-shrink: 0;
             display: block;
+            color: var(--primary);
         }
 
         nav { 
@@ -124,7 +179,7 @@
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            font-weight: 700;
+            font-weight: var(--weight-bolder);
             transition: 0.3s;
             white-space: nowrap;
         }
@@ -134,7 +189,7 @@
             display: flex;
             gap: 12px;
             font-size: 11px;
-            font-weight: 800;
+            font-weight: var(--weight-extra);
             border-left: 2px solid var(--border);
             padding-left: 15px;
             min-height: 30px;
@@ -151,12 +206,12 @@
             text-align: center;
             flex-shrink: 0;
         }
-        .lang-switch span:hover { background: rgba(0,0,0,0.05); }
+        .lang-switch span:hover { background: rgba(141,123,104,0.1); }
         .lang-switch span.active {
             opacity: 1;
             text-decoration: underline;
-            background: rgba(0,0,0,0.08);
-            font-weight: 900;
+            background: rgba(141,123,104,0.15);
+            font-weight: var(--weight-extra);
         }
 
         .container {
@@ -191,20 +246,21 @@
 
         h1 {
             font-size: clamp(2.2rem, 7.7vw, 6.1rem);
-            font-weight: 300;
+            font-weight: 500;
             line-height: 0.95;
             letter-spacing: -0.05em;
             text-transform: uppercase;
             margin-bottom: 1.8rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            color: var(--primary);
         }
 
         .hero-description {
             max-width: 550px;
             font-size: clamp(1rem, 2.1vw, 1.25rem);
-            font-weight: 500;
-            color: #333;
+            font-weight: var(--weight-bolder);
+            color: var(--secondary);
             margin-bottom: 2.4rem;
             line-height: 1.6;
             word-wrap: break-word;
@@ -230,10 +286,10 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.3em;
-            color: var(--accent);
+            color: var(--accent-brown);
             margin-bottom: 1.2rem;
             display: block;
-            font-weight: 800;
+            font-weight: var(--weight-extra);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -241,12 +297,13 @@
 
         h2 {
             font-size: clamp(1.7rem, 4.4vw, 2.8rem);
-            font-weight: 600;
+            font-weight: var(--weight-bold);
             margin-bottom: 1.8rem;
             text-transform: uppercase;
             line-height: 1.15;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            color: var(--primary);
         }
 
         .grid {
@@ -258,8 +315,8 @@
 
         p {
             font-size: 1.1rem;
-            font-weight: 400;
-            color: #222;
+            font-weight: var(--weight-body);
+            color: var(--secondary);
             margin-bottom: 1.4rem;
             line-height: 1.6;
             word-wrap: break-word;
@@ -267,27 +324,93 @@
         }
 
         .info-card {
-            background: rgba(0,0,0,0.03);
+            background: var(--soft-beige);
             padding: 1.8rem;
-            border-left: 4px solid var(--fg);
+            border-left: 4px solid var(--accent-brown);
         }
 
         .data-row {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 2px solid rgba(0,0,0,0.08);
+            border-bottom: 2px solid rgba(141,123,104,0.2);
             font-size: 1rem;
             flex-wrap: wrap;
         }
         .data-label {
-            font-weight: 800;
+            font-weight: var(--weight-extra);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             flex-shrink: 0;
         }
 
-        /* СТИЛИ ДЛЯ БЛОКА СПЕЦИФИКАЦИИ */
+        /* Галерея из двух изображений */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .gallery-item {
+            background: var(--soft-beige);
+            aspect-ratio: 4 / 3;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+        .gallery-item .placeholder {
+            width: 100%;
+            height: 80%;
+            background: #cbb9a8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg);
+            font-size: 2rem;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-caption {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: var(--weight-bolder);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            background: var(--bg);
+            text-align: center;
+        }
+
+        /* Схема структуры плиты */
+        .stack-schema {
+            background: var(--soft-beige);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent-brown);
+        }
+        .stack-layer {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+        .layer-name {
+            font-weight: var(--weight-extra);
+            min-width: 140px;
+            color: var(--primary);
+        }
+        .layer-desc {
+            color: var(--secondary);
+            font-weight: var(--weight-body);
+        }
+
+        /* Таблица материалов (без SiC, добавлены аппреты) */
         .materials-table {
             display: grid;
             grid-template-columns: 1fr;
@@ -295,155 +418,67 @@
             margin-top: 2rem;
             margin-bottom: 2.5rem;
         }
-
         .material-row {
             display: grid;
             grid-template-columns: 1fr 2fr;
             padding: 1.2rem 0;
-            border-bottom: 2px solid rgba(0,0,0,0.08);
+            border-bottom: 2px solid rgba(141,123,104,0.2);
             align-items: start;
             gap: 1rem;
         }
-
         .material-name {
-            font-weight: 800;
+            font-weight: var(--weight-extra);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-size: 1rem;
             flex-shrink: 0;
             min-width: 0;
             word-wrap: break-word;
-            overflow-wrap: break-word;
         }
-
         .material-spec {
-            font-weight: 400;
-            color: #222;
+            font-weight: var(--weight-body);
+            color: var(--secondary);
             line-height: 1.6;
             font-size: 1.1rem;
             min-width: 0;
             word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
-        /* УЛУЧШЕННЫЙ UX ДЛЯ ДОРОЖНОЙ КАРТЫ */
-        .roadmap-container {
-            position: relative;
-            margin-top: 3rem;
-        }
-
-        .roadmap-line {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--border);
-            margin-left: 120px;
-            z-index: 1;
-        }
-
-        .roadmap-items {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 4rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .roadmap-item {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 3rem;
-            align-items: start;
-            position: relative;
-        }
-
-        .roadmarker {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            padding-right: 3.5rem;
-            text-align: right;
-            height: 100%;
-            min-height: 60px;
-        }
-
-        .roadmap-date {
-            font-weight: 800;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--primary);
-            line-height: 1.4;
-            margin-top: 8px;
-            white-space: nowrap;
-        }
-
+        /* Дорожная карта */
+        .roadmap-container { margin-top: 3rem; }
+        .roadmap-items { display: flex; flex-direction: column; gap: 2.5rem; }
+        .roadmap-item { display: flex; flex-direction: column; gap: 0.8rem; }
+        .roadmarker { display: flex; align-items: center; gap: 1rem; padding-left: 2.2rem; position: relative; }
         .roadmap-dot {
-            position: absolute;
-            right: -12px;
-            top: 8px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: 4px solid var(--bg);
+            position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--accent-brown); border: 3px solid var(--bg);
             box-shadow: 0 0 0 3px var(--border);
-            z-index: 3;
-            transition: all 0.3s ease;
         }
-
-        .roadmap-dot:hover {
-            transform: scale(1.2);
-            box-shadow: 0 0 0 3px var(--primary);
+        .roadmap-date {
+            font-weight: var(--weight-extra);
+            font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--primary);
+            margin-left: 2rem; white-space: nowrap;
         }
-
-        .roadmap-content {
-            padding-left: 2rem;
-            border-left: 2px solid transparent;
-            padding-top: 8px;
-        }
-
+        .roadmap-content { padding-left: 2.2rem; }
         .roadmap-phase {
-            font-weight: 800;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            display: block;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            font-weight: var(--weight-extra);
+            font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 0.5rem;
         }
-
         .roadmap-description {
-            font-weight: 400;
-            color: var(--secondary);
-            line-height: 1.7;
-            font-size: 1.15rem;
-            min-height: 60px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .roadmap-item:hover .roadmap-dot {
-            transform: scale(1.1);
-        }
-
-        .roadmap-item:hover .roadmap-content {
-            border-left-color: rgba(0,0,0,0.2);
+            font-weight: var(--weight-body);
+            color: var(--secondary); line-height: 1.6; font-size: 1rem;
         }
 
         .cta {
             display: inline-block;
             padding: 1.2rem 2.4rem;
-            background: var(--fg);
+            background: var(--primary);
             color: #fff;
             text-decoration: none;
             font-size: 12px;
-            font-weight: 800;
+            font-weight: var(--weight-extra);
             text-transform: uppercase;
             letter-spacing: 0.2em;
             transition: 0.4s;
@@ -453,16 +488,15 @@
             border-radius: 0;
             white-space: nowrap;
         }
-
         .cta:hover {
-            background: #333;
+            background: var(--accent-brown);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(141,123,104,0.2);
         }
 
         footer {
             padding: 3.5rem 25px;
-            background: #fafafa;
+            background: var(--soft-beige);
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2.4rem;
@@ -476,30 +510,27 @@
             text-transform: uppercase;
             letter-spacing: 0.2em;
             margin-bottom: 1.5rem;
-            font-weight: 800;
+            font-weight: var(--weight-extra);
+            color: var(--primary);
         }
         .footer-col p {
             font-size: 1rem;
-            color: #555;
+            color: var(--secondary);
             line-height: 1.5;
-            font-weight: 400;
+            font-weight: var(--weight-body);
             word-wrap: break-word;
-            overflow-wrap: break-word;
         }
-
-        /* ДИСКЛЕЙМЕР */
         .disclaimer {
             font-size: 0.9rem;
-            color: #777;
+            color: var(--muted);
             text-align: center;
             padding-top: 2rem;
             margin-top: 2rem;
-            border-top: 2px solid rgba(0,0,0,0.08);
+            border-top: 2px solid rgba(141,123,104,0.2);
             grid-column: 1 / -1;
             font-style: italic;
             line-height: 1.5;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            font-weight: var(--weight-body);
         }
 
         .loader {
@@ -517,984 +548,321 @@
             z-index: 9999;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
+        .loader.hidden { opacity: 0; visibility: hidden; }
         .loader-spinner {
-            width: 44px;
-            height: 44px;
-            border: 3px solid rgba(0,0,0,0.1);
-            border-top-color: var(--fg);
+            width: 44px; height: 44px;
+            border: 3px solid rgba(141,123,104,0.2);
+            border-top-color: var(--accent-brown);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 22px;
         }
-
         .loader-text {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--fg);
-            font-weight: 800;
+            font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+            color: var(--primary); font-weight: var(--weight-extra);
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* MOBILE ADJUSTMENTS */
+        /* мобильные адаптации */
         @media (max-width: 768px) {
-            html {
-                position: relative;
-                height: auto;
-                overflow-y: auto;
-            }
-            
-            body {
-                position: relative;
-                height: auto;
-                overflow-y: visible;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .matte-overlay,
-            #canvas-bg,
-            .loader {
-                height: 100vh;
-                height: -webkit-fill-available;
-                position: fixed;
-            }
-
-            header {
-                padding: 12px 15px;
-                flex-wrap: nowrap;
-                gap: 10px;
-                height: 65px;
-                border-bottom-width: 2px;
-                overflow: visible;
-            }
-
-            .logo {
-                font-size: 1rem;
-                letter-spacing: 0.18em;
-                font-weight: 900;
-                white-space: nowrap;
-                overflow: visible;
-                text-overflow: clip;
-                flex-shrink: 0;
-                display: block;
-                min-width: auto;
-                width: auto;
-                max-width: none;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .lang-switch {
-                margin-left: auto;
-                padding-left: 12px;
-                font-size: 11px;
-                font-weight: 900;
-                gap: 8px;
-                min-height: 35px;
-                border-left-width: 2px;
-                flex-shrink: 0;
-            }
-
-            .lang-switch span {
-                padding: 6px 8px;
-                min-width: 36px;
-                font-size: 11px;
-                font-weight: 900;
-                flex-shrink: 0;
-            }
-
-            .container {
-                padding: 0 18px;
-            }
-
-            #hero {
-                padding-top: 70px;
-                padding-bottom: 35px;
-                min-height: 90vh;
-                min-height: calc(var(--vh, 1vh) * 90);
-            }
-
-            h1 {
-                font-size: clamp(1.8rem, 10vw, 3.5rem);
-                margin-bottom: 1.5rem;
-                line-height: 1.1;
-                font-weight: 400;
-                color: #000;
-                text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-                word-break: break-word;
-                overflow-wrap: break-word;
-                hyphens: auto;
-            }
-
-            .hero-description {
-                font-size: 1.1rem;
-                margin-bottom: 2.2rem;
-                font-weight: 600;
-                color: #111;
-                line-height: 1.7;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                max-width: 100%;
-            }
-
-            section {
-                padding: 50px 0;
-                border-bottom-width: 2px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                margin-top: 1.8rem;
-            }
-
-            .info-card {
-                padding: 1.5rem;
-                background: rgba(0,0,0,0.04);
-                border-left-width: 4px;
-            }
-
-            /* ИСПРАВЛЕННАЯ АДАПТАЦИЯ ДОРОЖНОЙ КАРТЫ ДЛЯ МОБИЛЬНЫХ */
-            .roadmap-container {
-                margin-top: 2rem;
-            }
-
-            .roadmap-line {
-                display: none;
-            }
-
-            .roadmap-items {
-                display: flex;
-                flex-direction: column;
-                gap: 2.5rem;
-                margin-top: 1rem;
-            }
-
-            .roadmap-item {
-                display: flex;
-                flex-direction: column;
-                gap: 0.8rem;
-                padding: 0;
-                margin: 0;
-                position: relative;
-                min-height: auto;
-                grid-template-columns: 1fr;
-            }
-
-            .roadmarker {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 1rem;
-                padding: 0;
-                margin: 0;
-                text-align: left;
-                position: relative;
-                height: auto;
-                min-height: auto;
-                padding-left: 2.2rem;
-                margin-bottom: 0.5rem;
-                align-items: center;
-                width: 100%;
-            }
-
-            .roadmap-dot {
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                right: auto;
-                width: 16px;
-                height: 16px;
-                border-width: 3px;
-                margin: 0;
-            }
-
-            .roadmap-date {
-                margin: 0;
-                padding: 0;
-                font-size: 0.9rem;
-                font-weight: 800;
-                text-align: left;
-                min-width: 100px;
-                flex-shrink: 0;
-                white-space: nowrap;
-            }
-
-            .roadmap-content {
-                padding: 0;
-                border-left: none;
-                margin: 0;
-                padding-left: 2.2rem;
-                width: 100%;
-            }
-
-            .roadmap-phase {
-                margin: 0 0 0.5rem 0;
-                font-size: 0.95rem;
-                font-weight: 800;
-                color: #000;
-                line-height: 1.3;
-            }
-
-            .roadmap-description {
-                font-size: 1rem;
-                line-height: 1.6;
-                min-height: auto;
-                margin: 0;
-                padding: 0;
-                color: #333;
-            }
-
-            .material-row {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-                padding: 1rem 0;
-                border-bottom-width: 2px;
-            }
-
-            .material-name, .material-spec {
-                font-size: 1rem;
-                line-height: 1.5;
-            }
-
-            .material-name {
-                font-size: 0.95rem;
-                min-width: 0;
-                overflow-wrap: break-word;
-                word-wrap: break-word;
-            }
-
-            .materials-table {
-                margin-bottom: 2rem;
-                gap: 0.8rem;
-            }
-
-            .cta {
-                width: 100%;
-                padding: 1rem 1.5rem;
-                font-size: 11px;
-                font-weight: 900;
-                letter-spacing: 0.15em;
-                min-height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                white-space: nowrap;
-            }
-
-            footer {
-                padding: 2.5rem 18px;
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: left;
-                background: #f8f8f8;
-                border-top-width: 2px;
-            }
-
-            .footer-col {
-                padding: 0;
-                width: 100%;
-            }
-
-            .footer-col h4 {
-                font-weight: 900;
-                color: #000;
-                margin-bottom: 1.2rem;
-                font-size: 11px;
-            }
-
-            .footer-col p {
-                font-weight: 500;
-                color: #222;
-                line-height: 1.6;
-                font-size: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .disclaimer {
-                font-size: 0.8rem;
-                padding-top: 1.5rem;
-                margin-top: 1.5rem;
-                text-align: left;
-                border-top-width: 2px;
-                line-height: 1.5;
-            }
-
-            .matte-overlay {
-                backdrop-filter: blur(2px) saturate(1.8) brightness(0.97);
-                -webkit-backdrop-filter: blur(2px) saturate(1.8) brightness(0.97);
-                background: rgba(255, 255, 255, 0.08);
-            }
-
-            .section-content {
-                margin-bottom: 0;
-            }
-
-            h2 {
-                margin-bottom: 1.5rem;
-                font-weight: 700;
-                color: #000;
-                font-size: clamp(1.6rem, 5vw, 2.2rem);
-                text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-                line-height: 1.25;
-                word-break: break-word;
-                overflow-wrap: break-word;
-            }
-
-            .label {
-                margin-bottom: 1rem;
-                font-weight: 900;
-                color: #222;
-                letter-spacing: 0.25em;
-                font-size: 10px;
-                max-width: 100%;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            p {
-                font-weight: 600;
-                color: #111;
-                line-height: 1.7;
-                font-size: 1.05rem;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                margin-bottom: 1.5rem;
-            }
-
-            .data-row {
-                font-weight: 600;
-                border-bottom-width: 2px;
-                border-bottom-color: rgba(0,0,0,0.12);
-                font-size: 1rem;
-                padding: 12px 0;
-                gap: 0.5rem;
-            }
-
-            .data-label {
-                font-weight: 900;
-                color: #000;
-                font-size: 0.9rem;
-                flex-shrink: 0;
-                min-width: 100px;
-            }
-
-            .data-row span:last-child {
-                font-weight: 700;
-                color: #000;
-                text-align: right;
-                flex-grow: 1;
-                min-width: 0;
-                word-wrap: break-word;
-                overflow-wrap: break-word;
-            }
-
-            :root {
-                --fg: #000000;
-                --border: rgba(0,0,0,0.2);
-            }
-
-            @media (prefers-contrast: high) {
-                :root {
-                    --fg: #000000;
-                    --border: rgba(0,0,0,0.6);
-                }
-
-                h1, h2, h3, h4 {
-                    font-weight: 900;
-                }
-
-                p {
-                    font-weight: 700;
-                }
-            }
-
-            @media (prefers-color-scheme: dark) {
-                body {
-                    background-color: #f5f5f5;
-                    color: #000;
-                }
-
-                .info-card {
-                    background: rgba(0,0,0,0.06);
-                }
-
-                .matte-overlay {
-                    background: rgba(255, 255, 255, 0.1);
-                }
-            }
+            html { position: relative; height: auto; overflow-y: auto; }
+            body { position: relative; height: auto; overflow-y: visible; }
+            header { padding: 12px 15px; height: 65px; }
+            nav { display: none; }
+            .lang-switch { margin-left: auto; padding-left: 12px; }
+            .container { padding: 0 18px; }
+            #hero { padding-top: 70px; }
+            h1 { font-size: clamp(1.8rem, 10vw, 3.5rem); }
+            .grid { grid-template-columns: 1fr; gap: 2rem; }
+            .image-gallery { grid-template-columns: repeat(2, 1fr); }
+            .stack-layer { flex-direction: column; gap: 0.2rem; }
+            .material-row { grid-template-columns: 1fr; gap: 0.5rem; }
+            .cta { width: 100%; }
+            footer { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 480px) {
-            header {
-                padding: 10px 12px;
-                height: 60px;
-            }
-            
-            .logo {
-                font-size: 0.9rem;
-                letter-spacing: 0.16em;
-            }
-            
-            .lang-switch {
-                padding-left: 10px;
-                gap: 6px;
-                min-height: 30px;
-            }
-            
-            .lang-switch span {
-                padding: 5px 6px;
-                min-width: 32px;
-                font-size: 10px;
-            }
-
-            h1 {
-                font-size: clamp(1.6rem, 11vw, 2.5rem);
-                font-weight: 500;
-                line-height: 1.15;
-            }
-
-            .hero-description {
-                font-size: 1rem;
-                font-weight: 700;
-                line-height: 1.6;
-            }
-
-            p {
-                font-size: 1rem;
-                font-weight: 700;
-                line-height: 1.6;
-            }
-
-            .material-row {
-                padding: 0.8rem 0;
-            }
-
-            .roadmarker {
-                padding-left: 1.8rem;
-            }
-
-            .roadmap-content {
-                padding-left: 1.8rem;
-            }
-
-            .roadmap-dot {
-                width: 14px;
-                height: 14px;
-                left: 0;
-            }
-
-            .roadmap-date {
-                font-size: 0.85rem;
-                min-width: 90px;
-            }
-
-            .roadmap-phase {
-                font-size: 0.9rem;
-            }
-
-            .roadmap-description {
-                font-size: 0.95rem;
-            }
-            
-            .cta {
-                font-size: 10px;
-                padding: 0.9rem 1.2rem;
-                min-height: 45px;
-            }
+            .image-gallery { grid-template-columns: 1fr; }
         }
-
-        @media (max-width: 360px) {
-            .logo {
-                font-size: 0.85rem;
-                letter-spacing: 0.14em;
-            }
-            
-            .lang-switch span {
-                min-width: 28px;
-                padding: 4px 5px;
-            }
-        }
-
-        [lang="zh"] h1 { font-weight: 500; letter-spacing: 0; }
-        [lang="zh"] p { text-align: left; font-weight: 500; }
     </style>
 </head>
 <body>
-
-<div class="loader" id="loader">
-    <div class="loader-spinner"></div>
-    <div class="loader-text">APOGEE SHELL</div>
-</div>
-
-<canvas id="canvas-bg"></canvas>
-<div class="matte-overlay"></div>
-
-<header>
-    <div class="logo">APOGEE SHELL</div>
-    <nav>
-        <a href="#hero" data-ru="Главная" data-en="Home" data-zh="首页">Главная</a>
-        <a href="#research" data-ru="Исследования" data-en="Research" data-zh="研究">Исследования</a>
-        <a href="#tech-focus" data-ru="Тех. фокус" data-en="Tech Focus" data-zh="技术重点">Тех. фокус</a>
-        <a href="#roadmap" data-ru="Дорожная карта" data-en="Roadmap" data-zh="路线图">Дорожная карта</a>
-        <a href="#materials" data-ru="Материалы" data-en="Materials" data-zh="材料">Материалы</a>
-        <a href="#contact" data-ru="Контакты" data-en="Contact" data-zh="联系我们">Контакты</a>
-    </nav>
-    <div class="lang-switch">
-        <span onclick="setLanguage('ru')" id="btn-ru" class="active">RU</span>
-        <span onclick="setLanguage('en')" id="btn-en">EN</span>
-        <span onclick="setLanguage('zh')" id="btn-zh">ZH</span>
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">APOGEE SHELL</div>
     </div>
-</header>
 
-<div class="container">
-    <section id="hero">
-        <div class="reveal-text">
-            <span class="label">Applied Material Science Laboratory</span>
-            <h1 data-ru="ИНЖЕНЕРИЯ<br>ЗАЩИТНЫХ СТРУКТУР" data-en="PROTECTIVE<br>STRUCTURES ENG" data-zh="防护结构<br>工程实验室">ИНЖЕНЕРИЯ<br>ЗАЩИТНЫХ СТРУКТУР</h1>
-            <div class="hero-description" data-ru="Прикладная лаборатория по разработке сверхлегких композитов и анализу баллистической устойчивости полимерных матриц." data-en="Applied laboratory for ultra-lightweight composites development and polymer matrix ballistic stability analysis." data-zh="专注于超轻型复合材料开发及聚合物基体抗弹稳定性分析的应用实验室。">
-                Прикладная лаборатория по разработке сверхлегких композитов и анализу баллистической устойчивости полимерных матриц.
-            </div>
-            <a href="mailto:fseleznev@icloud.com" class="cta" data-ru="СВЯЗАТЬСЯ" data-en="CONTACT R&D" data-zh="联系研发部门">СВЯЗАТЬСЯ</a>
-        </div>
-    </section>
+    <!-- Фоновая структура — бесконечная сетка правильных шестиугольников (как соты) с параллаксом -->
+    <svg id="structure-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice">
+        <defs>
+            <!-- Паттерн гексагональной сетки (пчелиные соты, flat-top) с правильными пропорциями -->
+            <pattern id="hexGrid" patternUnits="userSpaceOnUse" width="120" height="104" x="0" y="0">
+                <!-- Шестиугольник с плоской вершиной (flat-top) размером: side = 60, высота = 104, ширина = 120 -->
+                <path d="M30,0 L90,0 L120,52 L90,104 L30,104 L0,52 Z" 
+                      fill="none" 
+                      stroke="#111111" 
+                      stroke-width="1.5" 
+                      opacity="0.6" 
+                      stroke-linejoin="round" 
+                      stroke-linecap="round"/>
+                <!-- Узлы (атомы) в вершинах шестиугольника -->
+                <circle cx="30" cy="0" r="3" fill="#111111" opacity="0.7"/>
+                <circle cx="90" cy="0" r="3" fill="#111111" opacity="0.7"/>
+                <circle cx="120" cy="52" r="3" fill="#111111" opacity="0.7"/>
+                <circle cx="90" cy="104" r="3" fill="#111111" opacity="0.7"/>
+                <circle cx="30" cy="104" r="3" fill="#111111" opacity="0.7"/>
+                <circle cx="0" cy="52" r="3" fill="#111111" opacity="0.7"/>
+                <!-- Дополнительные точки внутри для имитации атомов углерода/кремния (опционально) -->
+                <circle cx="60" cy="52" r="2" fill="#111111" opacity="0.5"/>
+            </pattern>
+        </defs>
+        <!-- Заливаем весь фон паттерном — он автоматически повторяется бесконечно во всех направлениях -->
+        <rect width="1200" height="1200" fill="url(#hexGrid)"/>
+    </svg>
+    <div class="matte-overlay"></div>
 
-    <section id="research">
-        <div class="section-content">
-            <span class="label">01 // R&D Protocol</span>
-            <h2 data-ru="ФИЗИКА УДАРНЫХ ВОЗДЕЙСТВИЙ" data-en="IMPACT PHYSICS RESEARCH" data-zh="冲击物理研究">ФИЗИКА УДАРНЫХ ВОЗДЕЙСТВИЙ</h2>
-            <div class="grid">
-                <div>
-                    <p data-ru="Мы изучаем поведение гетерогенных структур при критических динамических нагрузках. Наша цель — оптимизация межфазного взаимодействия для предотвращения расслоения материалов." data-en="We study heterogeneous structure behavior under critical dynamic loads. Our goal is to optimize interfacial interaction to prevent material delamination." data-zh="我们研究临界动态载荷下的异质结构行为。我们的目标是优化界面相互作用，以防止材料分层。">
-                        Мы изучаем поведение гетерогенных структур при критических динамических нагрузках. Наша цель — оптимизация межфазного взаимодействия для предотвращения расслоения материалов.
-                    </p>
-                    <p data-ru="Деятельность лаборатории включает итерационное прототипирование и баллистический анализ полимерных систем с высокими скоростями деформации." data-en="Laboratory activities include iterative prototyping and ballistic analysis of polymer systems with high strain rates." data-zh="实验室活动包括高应变率聚合物系统的迭代原型设计和弹道分析。">
-                        Деятельность лаборатории включает итерационное прототипирование и баллистический анализ полимерных систем с высокими скоростями деформации.
-                    </p>
-                </div>
-                <div class="info-card">
-                    <div class="data-row"><span class="data-label" data-ru="Методология" data-en="Methodology" data-zh="研究方法">Методология</span><span data-ru="НИОКР" data-en="R&D" data-zh="研发">НИОКР</span></div>
-                    <div class="data-row"><span class="data-label" data-ru="Волокна" data-en="Fibers" data-zh="纤维">Волокна</span><span data-ru="UHMWPE / Aramid" data-en="UHMWPE / Aramid" data-zh="超高分子量聚乙烯 / 芳纶">UHMWPE / Aramid</span></div>
-                    <div class="data-row"><span class="data-label" data-ru="Матрица" data-en="Matrix" data-zh="基体">Матрица</span><span data-ru="Эпоксидная / Уретановая" data-en="Epoxy / Urethane" data-zh="环氧树脂 / 聚氨酯">Эпоксидная / Уретановая</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- БЛОК №1: НАПРАВЛЕНИЯ ИССЛЕДОВАНИЙ -->
-    <section id="tech-focus">
-        <div class="section-content">
-            <span class="label">01.1 // R&D FOCUS AREAS</span>
-            <h2 data-ru="КЛЮЧЕВЫЕ ТЕХНОЛОГИЧЕСКИЕ ВЕКТОРЫ" data-en="KEY TECHNOLOGICAL VECTORS" data-zh="关键技术方向">КЛЮЧЕВЫЕ ТЕХНОЛОГИЧЕСКИЕ ВЕКТОРЫ</h2>
-            <div class="grid">
-                <div>
-                    <p data-ru="Матричный анализ. Исследование синергии термопластичных связующих и арамидных волокон для минимизации площади деформации при динамическом ударе." data-en="Matrix Analysis. Research of synergy between thermoplastic binders and aramid fibers to minimize deformation area under dynamic impact." data-zh="基体分析。研究热塑性粘合剂与芳纶纤维的协同作用，以最小化动态冲击下的变形面积。">
-                        Матричный анализ. Исследование синергии термопластичных связующих и арамидных волокон для минимизации площади деформации при динамическом ударе.
-                    </p>
-                </div>
-                <div>
-                    <p data-ru="Энергопоглощение. Разработка протокола укладки слоев с переменным вектором плотности для повышения живучести композита при многократных попаданиях." data-en="Energy Absorption. Development of layer placement protocol with variable density vector to enhance composite survivability under multiple hits." data-zh="能量吸收。开发具有可变密度矢量的层铺放协议，以增强复合材料在多次冲击下的生存能力。">
-                        Энергопоглощение. Разработка протокола укладки слоев с переменным вектором плотности для повышения живучести композита при многократных попаданиях.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- БЛОК №2: ДОРОЖНАЯ КАРТА С УЛУЧШЕННЫМ UX -->
-    <section id="roadmap">
-        <div class="section-content">
-            <span class="label">01.2 // MILESTONES</span>
-            <h2 data-ru="ГРАФИК РЕАЛИЗАЦИИ НИОКР" data-en="R&D IMPLEMENTATION TIMELINE" data-zh="研发实施时间表">ГРАФИК РЕАЛИЗАЦИИ НИОКР</h2>
-
-            <div class="roadmap-container">
-                <div class="roadmap-line"></div>
-
-                <div class="roadmap-items">
-                    <div class="roadmap-item">
-                        <div class="roadmarker">
-                            <div class="roadmap-date" data-ru="Январь 2026" data-en="January 2026" data-zh="2026年1月">Январь 2026</div>
-                            <div class="roadmap-dot"></div>
-                        </div>
-                        <div class="roadmap-content">
-                            <span class="roadmap-phase" data-ru="Поиск материалов" data-en="Material Sourcing" data-zh="材料采购">Поиск материалов</span>
-                            <div class="roadmap-description" data-ru="Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов." data-en="Analysis of high-tech raw materials market. Participation in specialized exhibitions to find suppliers of UHMWPE and ceramic components." data-zh="分析高科技原材料市场。参加专业展览寻找超高分子量聚乙烯和陶瓷组件供应商。">
-                                Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="roadmap-item">
-                        <div class="roadmarker">
-                            <div class="roadmap-date" data-ru="Март 2026" data-en="March 2026" data-zh="2026年3月">Март 2026</div>
-                            <div class="roadmap-dot"></div>
-                        </div>
-                        <div class="roadmap-content">
-                            <span class="roadmap-phase" data-ru="Фаза прототипирования" data-en="Prototyping Phase" data-zh="原型阶段">Фаза прототипирования</span>
-                            <div class="roadmap-description" data-ru="Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоев." data-en="Assembly of first experimental material batches and conducting primary tests for layer adhesion strength." data-zh="组装首批实验材料批次并进行层间粘附强度的初步测试。">
-                                Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоев.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="roadmap-item">
-                        <div class="roadmarker">
-                            <div class="roadmap-date" data-ru="Июнь 2026" data-en="June 2026" data-zh="2026年6月">Июнь 2026</div>
-                            <div class="roadmap-dot"></div>
-                        </div>
-                        <div class="roadmap-content">
-                            <span class="roadmap-phase" data-ru="Баллистическая валидация" data-en="Ballistic Validation" data-zh="弹道验证">Баллистическая валидация</span>
-                            <div class="roadmap-description" data-ru="Лабораторные испытания в специализированных тирах для подтверждения расчетных характеристик баллистической стойкости." data-en="Laboratory tests in specialized shooting ranges to confirm calculated ballistic resistance characteristics." data-zh="在专业射击场进行实验室测试，以确认计算的弹道阻力特性。">
-                                Лабораторные испытания в специализированных тирах для подтверждения расчетных характеристик баллистической стойкости.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- БЛОК №3: СПЕЦИФИКАЦИЯ ЗАПРОСА -->
-    <section id="materials">
-        <div class="section-content">
-            <span class="label">02 // TECHNICAL REQUEST</span>
-            <h2 data-ru="МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ" data-en="MATERIALS FOR VALIDATION" data-zh="待验证材料">МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ</h2>
-
-            <div class="materials-table">
-                <div class="material-row">
-                    <div class="material-name" data-ru="СВМПЭ (UHMWPE)" data-en="UHMWPE" data-zh="超高分子量聚乙烯">СВМПЭ (UHMWPE)</div>
-                    <div class="material-spec" data-ru="Однонаправленные (UD) листы, плотность 130–160 г/м², для формирования антитравматического слоя." data-en="Unidirectional (UD) sheets, density 130–160 g/m², for forming anti-trauma layer." data-zh="单向（UD）片材，密度130–160克/平方米，用于形成防创伤层。">
-                        Однонаправленные (UD) листы, плотность 130–160 г/м², для формирования антитравматического слоя.
-                    </div>
-                </div>
-
-                <div class="material-row">
-                    <div class="material-name" data-ru="Керамические элементы" data-en="Ceramic Elements" data-zh="陶瓷组件">Керамические элементы</div>
-                    <div class="material-spec" data-ru="Монолитные или мозаичные панели на основе Al₂O₃ (оксид алюминия) чистотой не менее 98%." data-en="Monolithic or mosaic panels based on Al₂O₃ (aluminum oxide) with purity of at least 98%." data-zh="基于Al₂O₃（氧化铝）的整体或镶嵌面板，纯度不低于98%。">
-                        Монолитные или мозаичные панели на основе Al₂O₃ (оксид алюминия) чистотой не менее 98%.
-                    </div>
-                </div>
-
-                <div class="material-row">
-                    <div class="material-name" data-ru="Смоляные системы" data-en="Resin Systems" data-zh="树脂系统">Смоляные системы</div>
-                    <div class="material-spec" data-ru="Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации." data-en="Low-viscosity epoxy and polyurethane systems with high polymerization rate." data-zh="低粘度环氧树脂和聚氨酯系统，具有高聚合速率。">
-                        Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации.
-                    </div>
-                </div>
-
-                <div class="material-row">
-                    <div class="material-name" data-ru="Арамидные ткани" data-en="Aramid Fabrics" data-zh="芳纶织物">Арамидные ткани</div>
-                    <div class="material-spec" data-ru="Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя." data-en="Plain weave fabrics (Ballistic Grade) for back layer reinforcement." data-zh="平纹织物（弹道级），用于背层增强。">
-                        Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя.
-                    </div>
-                </div>
-            </div>
-
-            <a href="mailto:fseleznev@icloud.com" class="cta" data-ru="СТАТЬ ПАРТНЕРОМ" data-en="BECOME PARTNER" data-zh="成为合作伙伴">СТАТЬ ПАРТНЕРОМ</a>
-        </div>
-    </section>
-</div>
-
-<footer id="contact">
-    <div class="footer-col">
+    <header>
         <div class="logo">APOGEE SHELL</div>
-        <p style="margin-top:1.8rem;" data-ru="Независимая лаборатория прикладных исследований." data-en="Independent applied research laboratory." data-zh="独立应用研究实验室。">Независимая лаборатория прикладных исследований.</p>
-    </div>
-    <div class="footer-col">
-        <h4 data-ru="Контакты" data-en="Contacts" data-zh="联系方式">Контакты</h4>
-        <p>Email: fseleznev@icloud.com</p>
-        <p data-ru="Москва, Россия" data-en="Moscow, Russia" data-zh="俄罗斯，莫斯科">Москва, Россия</p>
-    </div>
-    <div class="footer-col">
-        <h4 data-ru="Сайт" data-en="Web" data-zh="网站">Сайт</h4>
-        <p>© 2026 https://apogee-shell.github.io/apogee-shell</p>
-        <p data-ru="НИОКР Подразделение" data-en="R&D Division" data-zh="研发部门">НИОКР Подразделение</p>
+        <nav>
+            <a href="#hero" data-ru="Главная" data-en="Home" data-zh="首页" data-ar="الرئيسية">Главная</a>
+            <a href="#research" data-ru="Исследования" data-en="Research" data-zh="研究" data-ar="البحث">Исследования</a>
+            <a href="#tech-focus" data-ru="Тех. фокус" data-en="Tech Focus" data-zh="技术重点" data-ar="التركيز التقني">Тех. фокус</a>
+            <a href="#roadmap" data-ru="Дорожная карта" data-en="Roadmap" data-zh="路线图" data-ar="خارطة الطريق">Дорожная карта</a>
+            <a href="#materials" data-ru="Материалы" data-en="Materials" data-zh="材料" data-ar="المواد">Материалы</a>
+            <a href="#contact" data-ru="Контакты" data-en="Contact" data-zh="联系我们" data-ar="اتصل">Контакты</a>
+        </nav>
+        <div class="lang-switch">
+            <span onclick="setLanguage('ru')" id="btn-ru" class="active">RU</span>
+            <span onclick="setLanguage('en')" id="btn-en">EN</span>
+            <span onclick="setLanguage('zh')" id="btn-zh">ZH</span>
+            <span onclick="setLanguage('ar')" id="btn-ar">AR</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="hero">
+            <div class="reveal-text">
+                <span class="label" data-ru="Лаборатория прикладного материаловедения" data-en="Applied Material Science Laboratory" data-zh="应用材料科学实验室" data-ar="مختبر علوم المواد التطبيقية">Лаборатория прикладного материаловедения</span>
+                <h1 data-ru="ГИБРИДНЫЕ<br>БРОНЕСТРУКТУРЫ" data-en="HYBRID<br>ARMOR STRUCTURES" data-zh="混合<br>装甲结构" data-ar="هياكل دروع<br>هجينة">ГИБРИДНЫЕ<br>БРОНЕСТРУКТУРЫ</h1>
+                <div class="hero-description" data-ru="Разработка гетерогенных композитов с управляемым межфазным взаимодействием на основе аппретирования и градиентного наполнения." data-en="Development of heterogeneous composites with controlled interfacial interaction based on silane treatment and gradient filling." data-zh="基于硅烷处理和梯度填充的界面可控非均质复合材料开发。" data-ar="تطوير مركبات غير متجانسة مع تفاعل بيني متحكم به يعتمد على المعالجة بالسيليان والتعبئة المتدرجة.">
+                    Разработка гетерогенных композитов с управляемым межфазным взаимодействием на основе аппретирования и градиентного наполнения.
+                </div>
+                <a href="mailto:fseleznev@icloud.com" class="cta" data-ru="СВЯЗАТЬСЯ" data-en="CONTACT R&D" data-zh="联系研发部门" data-ar="اتصل بالبحث">СВЯЗАТЬСЯ</a>
+            </div>
+        </section>
+
+        <section id="research">
+            <div class="section-content">
+                <span class="label">01 // R&D PROTOCOL</span>
+                <h2 data-ru="ИНЖЕНЕРИЯ МЕЖФАЗНОГО СЛОЯ" data-en="INTERFACIAL LAYER ENGINEERING" data-zh="界面层工程" data-ar="هندسة الطبقة البينية">ИНЖЕНЕРИЯ МЕЖФАЗНОГО СЛОЯ</h2>
+                <div class="grid">
+                    <div>
+                        <p data-ru="Применение аппретов на основе силанов GPTMS и APS обеспечивает ковалентное связывание между инертным базальтовым волокном и эпоксидной матрицей. Это повышает адгезию на 40% и исключает расслоение при ударных нагрузках." data-en="Application of silane coupling agents GPTMS and APS provides covalent bonding between inert basalt fiber and epoxy matrix. This increases adhesion by 40% and prevents delamination under impact loads." data-zh="应用GPTMS和APS硅烷偶联剂可在惰性玄武岩纤维与环氧基体之间形成共价键，使附着力提高40%，并防止冲击载荷下的分层。" data-ar="يوفر استخدام عوامل اقتران السيلان GPTMS و APS رابطة تساهمية بين ألياف البازلت الخاملة ومصفوفة الإيبوكسي. هذا يزيد من الالتصاق بنسبة 40٪ ويمنع التفكك تحت أحمال الصدمات.">
+                            Применение аппретов на основе силанов GPTMS и APS обеспечивает ковалентное связывание между инертным базальтовым волокном и эпоксидной матрицей. Это повышает адгезию на 40% и исключает расслоение при ударных нагрузках.
+                        </p>
+                        <p data-ru="Градиентное наполнение матрицы трёхфракционным карбидом кремния (F60, F120, F220) позволяет достичь плотности упаковки >92%, минимизируя микропустоты и увеличивая модуль упругости композита. Тщательный подбор размера частиц обеспечивает максимальное заполнение объёма." data-en="Gradient filling of the matrix with three-fraction silicon carbide (F60, F120, F220) achieves packing density >92%, minimizing microvoids and increasing the composite's elastic modulus. Careful particle size selection ensures maximum volume filling." data-zh="使用三组分碳化硅（F60、F120、F220）对基体进行梯度填充，可实现超过92%的堆积密度，最大限度地减少微孔并提高复合材料的弹性模量。仔细选择粒径可确保最大体积填充。" data-ar="التعبئة المتدرجة للمصفوفة بكربيد السيليكون ثلاثي الأجزاء (F60، F120، F220) تحقق كثافة تعبئة تزيد عن 92٪، مما يقلل من الفراغات الدقيقة ويزيد من معامل مرونة المركب. يضمن اختيار حجم الجسيمات الدقيق أقصى ملء للحجم.">
+                            Градиентное наполнение матрицы трёхфракционным карбидом кремния (F60, F120, F220) позволяет достичь плотности упаковки >92%, минимизируя микропустоты и увеличивая модуль упругости композита. Тщательный подбор размера частиц обеспечивает максимальное заполнение объёма.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <div class="data-row"><span class="data-label" data-ru="Аппреты" data-en="Coupling agents" data-zh="偶联剂" data-ar="عوامل الاقتران">Аппреты</span><span>GPTMS / APS</span></div>
+                        <div class="data-row"><span class="data-label" data-ru="Фракции SiC" data-en="SiC fractions" data-zh="SiC 粒度" data-ar="أجزاء SiC">Фракции SiC</span><span>F60, F120, F220</span></div>
+                        <div class="data-row"><span class="data-label" data-ru="Плотность упаковки" data-en="Packing density" data-zh="堆积密度" data-ar="كثافة التعبئة">Плотность упаковки</span><span>92–95%</span></div>
+                    </div>
+                </div>
+
+                <!-- Две картинки: базальт и SiC порошок (заменены на реальные изображения) -->
+                <div class="image-gallery">
+                    <div class="gallery-item">
+                        <img src="basalt-fiber-weave-macro.jpg" alt="Basalt fiber weave macro" style="width:100%; height:80%; object-fit: cover;">
+                        <div class="gallery-caption" data-ru="Базальтовая ткань" data-en="Basalt fabric" data-zh="玄武岩织物" data-ar="نسيج البازلت">Базальтовая ткань</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="micro-structure-sic-f60.jpg" alt="SiC F60 microstructure" style="width:100%; height:80%; object-fit: cover;">
+                        <div class="gallery-caption">SiC</div> <!-- только формула, без перевода -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech-focus">
+            <div class="section-content">
+                <span class="label">01.1 // KEY TECHNOLOGIES</span>
+                <h2 data-ru="ДИНАМИЧЕСКОЕ ДЕМПФИРОВАНИЕ И УДАРНАЯ ВЯЗКОСТЬ" data-en="DYNAMIC DAMPING & SHOCK TOUGHNESS" data-zh="动态阻尼与冲击韧性" data-ar="التخميد الديناميكي ومتانة الصدمات">ДИНАМИЧЕСКОЕ ДЕМПФИРОВАНИЕ И УДАРНАЯ ВЯЗКОСТЬ</h2>
+                <div class="grid">
+                    <div>
+                        <p data-ru="Интеграция «свободных» пластин СВМПЭ (UHMWPE) толщиной 2.5 мм внутри жёсткого каркаса обеспечивает диссипацию кинетической энергии через микро-смещения (Dynamic Damping). Это позволяет снизить передаваемую нагрузку на тыльные слои и повысить живучесть преграды при многократных попаданиях." data-en="Integration of 'free' UHMWPE plates (2.5 mm) inside the rigid frame provides kinetic energy dissipation through micro-displacements (Dynamic Damping). This reduces the load transmitted to the back layers and increases the survivability of the barrier under multiple impacts." data-zh="在刚性框架内集成2.5毫米厚的“自由”UHMWPE板，通过微位移实现动能耗散（动态阻尼）。这减少了传递到背层的载荷，并提高了屏障在多次冲击下的生存能力。" data-ar="دمج ألواح UHMWPE 'الحرة' بسمك 2.5 مم داخل الإطار الصلب يوفر تبديد الطاقة الحركية من خلال الإزاحات الدقيقة (التخميد الديناميكي). هذا يقلل من الحمل المنقول إلى الطبقات الخلفية ويزيد من قدرة الحاجز على التحمل تحت الصدمات المتعددة.">
+                            Интеграция «свободных» пластин СВМПЭ (UHMWPE) толщиной 2.5 мм внутри жёсткого каркаса обеспечивает диссипацию кинетической энергии через микро-смещения (Dynamic Damping). Это позволяет снизить передаваемую нагрузку на тыльные слои и повысить живучесть преграды при многократных попаданиях.
+                        </p>
+                    </div>
+                    <div>
+                        <p data-ru="Модификация эпоксидного связующего Этал-45М добавками каучука повышает ударную вязкость матрицы, предотвращая хрупкое разрушение при первом попадании (Shock-Toughened Matrix). Достигнутые показатели вязкости разрушения K₁c превышают 2.5 МПа·м¹/²." data-en="Modification of Etal-45M epoxy binder with rubber additives increases the matrix impact toughness, preventing brittle fracture at first hit (Shock-Toughened Matrix). Achieved fracture toughness K₁c exceeds 2.5 MPa·m¹/²." data-zh="使用橡胶添加剂改性Etal-45M环氧粘合剂可提高基体的冲击韧性，防止首次冲击时的脆性断裂（冲击增韧基体）。达到的断裂韧性K₁c超过2.5 MPa·m¹/²。" data-ar="تعديل رابط الإيبوكسي Etal-45M بإضافات مطاطية يزيد من متانة تأثير المصفوفة، مما يمنع الكسر الهش عند الضربة الأولى (مصفوفة مقاومة للصدمات). تتجاوز متانة الكسر المحققة K₁c 2.5 ميجا باسكال·م¹/².">
+                            Модификация эпоксидного связующего Этал-45М добавками каучука повышает ударную вязкость матрицы, предотвращая хрупкое разрушение при первом попадании (Shock-Toughened Matrix). Достигнутые показатели вязкости разрушения K₁c превышают 2.5 МПа·м¹/².
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция: Схема структуры плиты -->
+        <section id="stack-schema">
+            <div class="section-content">
+                <span class="label">01.2 // LAYER ARCHITECTURE</span>
+                <h2 data-ru="СТРУКТУРА ГИБРИДНОЙ ПЛИТЫ" data-en="HYBRID PLATE STRUCTURE" data-zh="混合板结构" data-ar="هيكل اللوحة الهجينة">СТРУКТУРА ГИБРИДНОЙ ПЛИТЫ</h2>
+                <div class="stack-schema">
+                    <div class="stack-layer"><span class="layer-name" data-ru="1. Лицевой слой:" data-en="1. Face layer:" data-zh="1. 面层：" data-ar="1. الطبقة الأمامية:">1. Лицевой слой:</span><span class="layer-desc" data-ru="Базальт + SiC (мелкая фракция F220) с аппретированием GPTMS" data-en="Basalt + SiC (fine fraction F220) with GPTMS silanization" data-zh="玄武岩 + SiC（细粒F220），GPTMS硅烷化" data-ar="بازلت + SiC (جزء ناعم F220) مع معالجة سيلانية GPTMS">Базальт + SiC (мелкая фракция F220) с аппретированием GPTMS</span></div>
+                    <div class="stack-layer"><span class="layer-name" data-ru="2. Ядро:" data-en="2. Core:" data-zh="2. 核心：" data-ar="2. اللب:">2. Ядро:</span><span class="layer-desc" data-ru="Гибрид базальт/кевлар + тройной SiC (F60, F120, F220) в матрице Этал-45М" data-en="Basalt/Kevlar hybrid + triple SiC (F60, F120, F220) in Etal-45M matrix" data-zh="玄武岩/凯夫拉混合 + 三重SiC（F60，F120，F220）在Etal-45M基体中" data-ar="هجين بازلت/كيفلار + SiC ثلاثي (F60، F120، F220) في مصفوفة Etal-45M">Гибрид базальт/кевлар + тройной SiC (F60, F120, F220) в матрице Этал-45М</span></div>
+                    <div class="stack-layer"><span class="layer-name" data-ru="3. Демпфер:" data-en="3. Damping gap:" data-zh="3. 阻尼层：" data-ar="3. فجوة التخميد:">3. Демпфер:</span><span class="layer-desc" data-ru="UHMWPE 2.5 мм (полусвободное крепление)" data-en="UHMWPE 2.5 mm (semi-bonded)" data-zh="UHMWPE 2.5毫米（半粘接）" data-ar="UHMWPE 2.5 مم (شبه مرتبط)">UHMWPE 2.5 мм (полусвободное крепление)</span></div>
+                    <div class="stack-layer"><span class="layer-name" data-ru="4. Тыльный слой:" data-en="4. Support shell:" data-zh="4. 背层：" data-ar="4. الغلاف الداعم:">4. Тыльный слой:</span><span class="layer-desc" data-ru="Cross-weave Basalt с пропиткой APS" data-en="Cross-weave Basalt with APS impregnation" data-zh="交叉编织玄武岩，APS浸渍" data-ar="بازلت متقاطع النسيج مع تشريب APS">Cross-weave Basalt с пропиткой APS</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap">
+            <div class="section-content">
+                <span class="label">02 // MILESTONES</span>
+                <h2 data-ru="ГРАФИК РЕАЛИЗАЦИИ НИОКР" data-en="R&D IMPLEMENTATION TIMELINE" data-zh="研发实施时间表" data-ar="الجدول الزمني لتنفيذ البحث">ГРАФИК РЕАЛИЗАЦИИ НИОКР</h2>
+                <div class="roadmap-container">
+                    <div class="roadmap-items">
+                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Январь 2026" data-en="January 2026" data-zh="2026年1月" data-ar="يناير 2026">Январь 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Поиск материалов" data-en="Material Sourcing" data-zh="材料采购" data-ar="توفير المواد">Поиск материалов</span><div class="roadmap-description" data-ru="Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов." data-en="Analysis of high-tech raw materials market. Participation in specialized exhibitions to find suppliers of UHMWPE and ceramic components." data-zh="分析高科技原材料市场。参加专业展览寻找超高分子量聚乙烯和陶瓷组件供应商。" data-ar="تحليل سوق المواد الخام عالية التقنية. المشاركة في المعارض المتخصصة للعثور على موردي UHMWPE والمكونات الخزفية.">Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов.</div></div></div>
+                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Март 2026" data-en="March 2026" data-zh="2026年3月" data-ar="مارس 2026">Март 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Первые тесты" data-en="First tests" data-zh="首次测试" data-ar="الاختبارات الأولى">Первые тесты</span><div class="roadmap-description" data-ru="Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоёв и баллистическую стойкость." data-en="Assembly of first experimental material batches and conducting primary tests for layer adhesion strength and ballistic resistance." data-zh="组装首批实验材料批次并进行层间粘附强度和抗弹性的初步测试。" data-ar="تجميع أول دفعات تجريبية من المواد وإجراء اختبارات أولية لقوة التصاق الطبقات والمقاومة الباليستية.">Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоёв и баллистическую стойкость.</div></div></div>
+                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Июнь 2026" data-en="June 2026" data-zh="2026年6月" data-ar="يونيو 2026">Июнь 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Баллистическая валидация" data-en="Ballistic Validation" data-zh="弹道验证" data-ar="التحقق الباليستي">Баллистическая валидация</span><div class="roadmap-description" data-ru="Лабораторные испытания в специализированных тирах для подтверждения расчётных характеристик баллистической стойкости по стандартам NIJ III+." data-en="Laboratory tests in specialized shooting ranges to confirm calculated ballistic resistance characteristics according to NIJ III+ standards." data-zh="在专业射击场进行实验室测试，以确认根据NIJ III+标准计算的弹道阻力特性。" data-ar="اختبارات معملية في ميادين رماية متخصصة لتأكيد خصائص المقاومة الباليستية المحسوبة وفقًا لمعايير NIJ III+.">Лабораторные испытания в специализированных тирах для подтверждения расчётных характеристик баллистической стойкости по стандартам NIJ III+.</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="materials">
+            <div class="section-content">
+                <span class="label">03 // TECHNICAL REQUEST</span>
+                <h2 data-ru="МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ" data-en="MATERIALS FOR VALIDATION" data-zh="待验证材料" data-ar="مواد للتحقق">МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ</h2>
+
+                <div class="materials-table">
+                    <div class="material-row"><div class="material-name" data-ru="СВМПЭ (UHMWPE)" data-en="UHMWPE" data-zh="超高分子量聚乙烯" data-ar="UHMWPE">СВМПЭ (UHMWPE)</div><div class="material-spec" data-ru="Однонаправленные (UD) листы, плотность 130–160 г/м², для антитравматического слоя." data-en="Unidirectional (UD) sheets, density 130–160 g/m², for anti-trauma layer." data-zh="单向（UD）片材，密度130–160克/平方米，用于防创伤层。" data-ar="صفائح أحادية الاتجاه (UD)، كثافة 130–160 جم/م²، للطبقة المضادة للصدمات.">Однонаправленные (UD) листы, плотность 130–160 г/м², для антитравматического слоя.</div></div>
+                    <div class="material-row"><div class="material-name" data-ru="Керамические элементы" data-en="Ceramic Elements" data-zh="陶瓷组件" data-ar="عناصر خزفية">Керамические элементы</div><div class="material-spec" data-ru="Монолитные или мозаичные панели на основе Al₂O₃ чистотой не менее 98%." data-en="Monolithic or mosaic panels based on Al₂O₃ with purity of at least 98%." data-zh="基于Al₂O₃的整体或镶嵌面板，纯度不低于98%。" data-ar="ألواح متجانسة أو فسيفسائية تعتمد على Al₂O₃ بنقاوة لا تقل عن 98%.">Монолитные или мозаичные панели на основе Al₂O₃ чистотой не менее 98%.</div></div>
+                    <div class="material-row"><div class="material-name" data-ru="Смоляные системы" data-en="Resin Systems" data-zh="树脂系统" data-ar="أنظمة الراتنج">Смоляные системы</div><div class="material-spec" data-ru="Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации (Этал-45М, аналоги)." data-en="Low-viscosity epoxy and polyurethane systems with high polymerization rate (Etal-45M, analogs)." data-zh="低粘度环氧树脂和聚氨酯系统，具有高聚合速率（Etal-45M等）。" data-ar="أنظمة إيبوكسي وبولي يوريثين منخفضة اللزوجة بمعدل بلمرة مرتفع (Etal-45M، نظائرها).">Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации (Этал-45М, аналоги).</div></div>
+                    <div class="material-row"><div class="material-name" data-ru="Арамидные ткани" data-en="Aramid Fabrics" data-zh="芳纶织物" data-ar="أقمشة أراميد">Арамидные ткани</div><div class="material-spec" data-ru="Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя." data-en="Plain weave fabrics (Ballistic Grade) for back layer reinforcement." data-zh="平纹织物（弹道级），用于背层增强。" data-ar="أقمشة بنسيج عادي (درجة باليستية) لتعزيز الطبقة الخلفية.">Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя.</div></div>
+                    <!-- Добавлена строка с аппретами (вместо SiC) -->
+                    <div class="material-row"><div class="material-name" data-ru="Аппреты (силаны)" data-en="Coupling agents (silanes)" data-zh="偶联剂（硅烷）" data-ar="عوامل اقتران (سيلانات)">Аппреты (силаны)</div><div class="material-spec" data-ru="GPTMS (3-глицидилоксипропилтриметоксисилан) и APS (3-аминопропилтриэтоксисилан) для модификации поверхности волокон." data-en="GPTMS (3-glycidyloxypropyltrimethoxysilane) and APS (3-aminopropyltriethoxysilane) for fiber surface modification." data-zh="GPTMS（3-缩水甘油醚氧基丙基三甲氧基硅烷）和APS（3-氨基丙基三乙氧基硅烷）用于纤维表面改性。" data-ar="GPTMS (3-جليسيديلوكسي بروبيل تريميثوكسيسيلان) و APS (3-أمينوبروبيل ترايثوكسيسيلان) لتعديل سطح الألياف.">GPTMS (3-глицидилоксипропилтриметоксисилан) и APS (3-аминопропилтриэтоксисилан) для модификации поверхности волокон.</div></div>
+                </div>
+                <a href="mailto:fseleznev@icloud.com" class="cta" data-ru="СТАТЬ ПАРТНЕРОМ" data-en="BECOME PARTNER" data-zh="成为合作伙伴" data-ar="كن شريكاً">СТАТЬ ПАРТНЕРОМ</a>
+            </div>
+        </section>
+
+        <!-- Дополнительная секция для увеличения длины страницы (подробности об аппретах) -->
+        <section id="coupling-agents">
+            <div class="section-content">
+                <span class="label">03.1 // SURFACE MODIFICATION</span>
+                <h2 data-ru="РОЛЬ АППРЕТОВ В МЕЖФАЗНОЙ АДГЕЗИИ" data-en="ROLE OF COUPLING AGENTS IN INTERFACIAL ADHESION" data-zh="偶联剂在界面附着力中的作用" data-ar="دور عوامل الاقتران في الالتصاق البيني">РОЛЬ АППРЕТОВ В МЕЖФАЗНОЙ АДГЕЗИИ</h2>
+                <p data-ru="Аппреты силанового ряда образуют химические мостики между неорганическим наполнителем (волокно, частицы SiC) и органической матрицей. GPTMS содержит эпоксидные группы, совместимые с эпоксидными смолами, а APS — аминогруппы, способные реагировать с отвердителями. Это увеличивает прочность сцепления на 30–50% и предотвращает деградацию свойств при динамических нагрузках." data-en="Silane coupling agents form chemical bridges between inorganic filler (fiber, SiC particles) and organic matrix. GPTMS contains epoxy groups compatible with epoxy resins, while APS has amino groups that can react with hardeners. This increases bonding strength by 30–50% and prevents property degradation under dynamic loads." data-zh="硅烷偶联剂在无机填料（纤维、SiC颗粒）和有机基体之间形成化学桥。GPTMS含有与环氧树脂相容的环氧基团，而APS具有可与固化剂反应的氨基。这将粘合强度提高30-50%，并防止动态载荷下的性能下降。" data-ar="تشكل عوامل اقتران السيلان جسورًا كيميائية بين الحشو غير العضوي (الألياف، جزيئات SiC) والمصفوفة العضوية. يحتوي GPTMS على مجموعات إيبوكسي متوافقة مع راتنجات الإيبوكسي، بينما يحتوي APS على مجموعات أمينية يمكنها التفاعل مع المقسيات. هذا يزيد من قوة الترابط بنسبة 30-50٪ ويمنع تدهور الخصائص تحت الأحمال الديناميكية.">
+                    Аппреты силанового ряда образуют химические мостики между неорганическим наполнителем (волокно, частицы SiC) и органической матрицей. GPTMS содержит эпоксидные группы, совместимые с эпоксидными смолами, а APS — аминогруппы, способные реагировать с отвердителями. Это увеличивает прочность сцепления на 30–50% и предотвращает деградацию свойств при динамических нагрузках.
+                </p>
+                <p data-ru="В нашей технологии используются комбинации аппретов для различных компонентов: базальт обрабатывается GPTMS, керамика — APS, что обеспечивает максимальную совместимость на всех границах раздела." data-en="Our technology uses combinations of coupling agents for different components: basalt is treated with GPTMS, ceramics with APS, ensuring maximum compatibility at all interfaces." data-zh="我们的技术对不同组分使用偶联剂组合：玄武岩用GPTMS处理，陶瓷用APS处理，确保在所有界面处具有最大相容性。" data-ar="تستخدم تقنيتنا مجموعات من عوامل الاقتران للمكونات المختلفة: يعالج البازلت بـ GPTMS، والسيراميك بـ APS، مما يضمن أقصى قدر من التوافق في جميع الواجهات.">
+                    В нашей технологии используются комбинации аппретов для различных компонентов: базальт обрабатывается GPTMS, керамика — APS, что обеспечивает максимальную совместимость на всех границах раздела.
+                </p>
+            </div>
+        </section>
     </div>
 
-    <!-- ДИСКЛЕЙМЕР -->
-    <div class="disclaimer" data-ru="Status: Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют." data-en="Status: All current activities are conducted within the framework of scientific and educational R&D. No final products are available for sale." data-zh="状态：所有当前活动均在科学和教育研发框架内进行。没有可供销售的最终产品。">
-        Status: Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют.
-    </div>
-</footer>
+    <footer id="contact">
+        <div class="footer-col"><div class="logo">APOGEE SHELL</div><p style="margin-top:1.8rem;" data-ru="Независимая лаборатория прикладных исследований." data-en="Independent applied research laboratory." data-zh="独立应用研究实验室。" data-ar="مختبر أبحاث تطبيقية مستقل.">Независимая лаборатория прикладных исследований.</p></div>
+        <div class="footer-col"><h4 data-ru="Контакты" data-en="Contacts" data-zh="联系方式" data-ar="جهات الاتصال">Контакты</h4><p>Email: fseleznev@icloud.com</p><p data-ru="Москва, Россия" data-en="Moscow, Russia" data-zh="俄罗斯，莫斯科" data-ar="موسكو، روسيا">Москва, Россия</p></div>
+        <div class="footer-col"><h4 data-ru="Сайт" data-en="Web" data-zh="网站" data-ar="الموقع">Сайт</h4><p>© 2026 apogee-shell.github.io</p><p data-ru="НИОКР Подразделение" data-en="R&D Division" data-zh="研发部门" data-ar="قسم البحث والتطوير">НИОКР Подразделение</p></div>
+        <div class="disclaimer" data-ru="Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют." data-en="All current activities are conducted within the framework of scientific and educational R&D. No final products are available for sale." data-zh="所有当前活动均在科学和教育研发框架内进行。没有可供销售的最终产品。" data-ar="يتم تنفيذ جميع الأنشطة الحالية في إطار البحث والتطوير العلمي والتعليمي. لا توجد منتجات نهائية متاحة للبيع.">Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют.</div>
+    </footer>
 
-<script>
-    // Функция для обновления высоты viewport
-    function updateViewportHeight() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-
-    // Инициализация при загрузке
-    updateViewportHeight();
-    
-    // Функция для обработки resize с debounce
-    let resizeTimeout;
-    function handleResize() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
+    <script>
+        (function() {
+            // Функция обновления высоты viewport
+            function updateViewportHeight() {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
             updateViewportHeight();
-            initCanvasSize();
-            
-            // Для мобильных устройств переинициализируем canvas при изменении ориентации
-            if (window.innerWidth <= 768) {
-                setTimeout(initCanvas, 100);
-            }
-        }, 150);
-    }
+            window.addEventListener('resize', updateViewportHeight);
+            window.addEventListener('orientationchange', function() { setTimeout(updateViewportHeight, 100); });
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', function() {
-        setTimeout(function() {
-            updateViewportHeight();
-            initCanvasSize();
-            initCanvas();
-        }, 300);
-    });
-
-    const canvas = document.getElementById('canvas-bg');
-    const ctx = canvas.getContext('2d');
-
-    function initCanvasSize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
-    initCanvasSize();
-
-    let pointCount;
-    let speedMultiplier;
-    let connectionDistance;
-    let isMobile = window.innerWidth <= 768;
-
-    // ВОССТАНОВЛЕНО ПРЕЖНЕЕ КОЛИЧЕСТВО ТОЧЕК
-    if (isMobile) {
-        pointCount = 60; // Было 60, как в оригинале
-        speedMultiplier = 0.35;
-        connectionDistance = 100;
-    } else {
-        pointCount = 120; // Было 120, как в оригинале
-        speedMultiplier = 0.5;
-        connectionDistance = 150;
-    }
-
-    let points = [];
-    
-    function initCanvas() {
-        points = [];
-        for(let i = 0; i < pointCount; i++) {
-            points.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * speedMultiplier,
-                vy: (Math.random() - 0.5) * speedMultiplier,
-                size: Math.random() * 1.5 + 1.0 // Восстановлен оригинальный размер
-            });
-        }
-    }
-    
-    initCanvas();
-
-    let animationId = null;
-    let lastTime = 0;
-    let isAnimating = true;
-
-    function draw(timestamp) {
-        if (!isAnimating || !canvas) return;
-
-        if (!lastTime) lastTime = timestamp;
-        const deltaTime = Math.min(timestamp - lastTime, 32);
-        lastTime = timestamp;
-
-        const timeScale = deltaTime / 16;
-
-        // Очищаем canvas
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Обновляем и рисуем точки
-        for (let i = 0; i < points.length; i++) {
-            const p = points[i];
-
-            p.x += p.vx * timeScale;
-            p.y += p.vy * timeScale;
-
-            // Отскок от границ
-            if (p.x < 0) {
-                p.x = 0;
-                p.vx = Math.abs(p.vx) * 0.9;
-            }
-            if (p.x > canvas.width) {
-                p.x = canvas.width;
-                p.vx = -Math.abs(p.vx) * 0.9;
-            }
-            if (p.y < 0) {
-                p.y = 0;
-                p.vy = Math.abs(p.vy) * 0.9;
-            }
-            if (p.y > canvas.height) {
-                p.y = canvas.height;
-                p.vy = -Math.abs(p.vy) * 0.9;
-            }
-
-            // Рисуем точку
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; // Восстановлена оригинальная прозрачность
-            ctx.fill();
-        }
-
-        // Рисуем соединения между точками
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)'; // Восстановлена оригинальная прозрачность
-        ctx.lineWidth = 1.5; // Восстановлена оригинальная толщина
-
-        for (let i = 0; i < points.length; i++) {
-            const p = points[i];
-
-            for (let j = i + 1; j < points.length; j++) {
-                const p2 = points[j];
-                const dx = p.x - p2.x;
-                const dy = p.y - p2.y;
-                const distanceSquared = dx * dx + dy * dy;
-
-                if (distanceSquared < connectionDistance * connectionDistance) {
-                    const distance = Math.sqrt(distanceSquared);
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.globalAlpha = 0.8 * (1 - distance / connectionDistance);
-                    ctx.stroke();
-                    ctx.globalAlpha = 1;
+            // Параллакс для фона — с использованием throttle через requestAnimationFrame
+            const bg = document.getElementById('structure-bg');
+            let ticking = false;
+            function updateParallax() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        if (bg) {
+                            const scrollY = window.scrollY;
+                            const speed = 0.2;
+                            bg.style.transform = `translateY(${scrollY * speed}px)`;
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
                 }
             }
-        }
+            window.addEventListener('scroll', updateParallax, { passive: true });
+            // Запускаем один раз для начальной позиции
+            updateParallax();
 
-        animationId = requestAnimationFrame(draw);
-    }
-
-    // Запускаем анимацию
-    isAnimating = true;
-    animationId = requestAnimationFrame(draw);
-
-    // Обработка скрытия/показа страницы
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            isAnimating = false;
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-        } else {
-            if (!animationId) {
-                isAnimating = true;
-                lastTime = 0;
-                animationId = requestAnimationFrame(draw);
-            }
-        }
-    });
-
-    // Предотвращаем быстрые двойные тапы (для мобильных)
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function(event) {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, { passive: false });
-
-    // Плавная загрузка
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            document.getElementById('loader').classList.add('hidden');
-
-            document.querySelector('#hero .reveal-text').classList.add('visible');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, 200);
+            // Переключение языка
+            window.setLanguage = function(lang) {
+                document.documentElement.lang = lang;
+                const body = document.body;
+                if (lang === 'ar') {
+                    body.setAttribute('dir', 'rtl');
+                } else {
+                    body.setAttribute('dir', 'ltr');
+                }
+                // Обновление текстовых элементов
+                document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.value = el.getAttribute('data-' + lang);
+                    } else {
+                        el.innerHTML = el.getAttribute('data-' + lang);
                     }
                 });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                document.querySelectorAll('.lang-switch span').forEach(s => s.classList.remove('active'));
+                document.getElementById('btn-' + lang).classList.add('active');
+                localStorage.setItem('apogee_lang', lang);
+            };
+
+            // Загрузка и анимации
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    document.getElementById('loader').classList.add('hidden');
+                    document.querySelector('#hero .reveal-text').classList.add('visible');
+
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                setTimeout(() => entry.target.classList.add('visible'), 200);
+                            }
+                        });
+                    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                    document.querySelectorAll('.section-content').forEach(el => observer.observe(el));
+
+                    const savedLang = localStorage.getItem('apogee_lang') || 'ru';
+                    setLanguage(savedLang);
+                }, 500);
             });
 
-            document.querySelectorAll('.section-content').forEach(el => {
-                observer.observe(el);
-            });
-
-            const savedLang = localStorage.getItem('apogee_lang') || 'ru';
-            setLanguage(savedLang);
-
-        }, 500);
-    });
-
-    // Функция переключения языка
-    function setLanguage(lang) {
-        document.documentElement.lang = lang;
-        document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                el.value = el.getAttribute('data-' + lang);
-            } else {
-                el.innerHTML = el.getAttribute('data-' + lang);
-            }
-        });
-        document.querySelectorAll('.lang-switch span').forEach(s => s.classList.remove('active'));
-        document.getElementById('btn-' + lang).classList.add('active');
-        localStorage.setItem('apogee_lang', lang);
-    }
-
-    // Плавная прокрутка
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                const headerHeight = 70;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
+            // Плавная прокрутка
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = 70;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                    }
                 });
-            }
-        });
-    });
+            });
 
-    // Предотвращаем масштабирование на iOS при фокусе
-    document.addEventListener('touchstart', function(e) {
-        if (e.touches.length > 1) {
-            e.preventDefault();
-        }
-    }, { passive: false });
-
-    let initialTouchEndY = 0;
-    
-    document.addEventListener('touchmove', function(e) {
-        // Предотвращаем скролл, если это не необходимо
-        if (e.target.tagName === 'CANVAS') {
-            e.preventDefault();
-        }
-    }, { passive: false });
-</script>
-
+            // Предотвращение масштабирования на iOS
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length > 1) e.preventDefault();
+            }, { passive: false });
+        })();
+    </script>
 </body>
 </html>

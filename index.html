@@ -124,7 +124,7 @@
             will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            transform: translateZ(0); /* фиксируем слой, без смещения */
+            transform: translateZ(0);
         }
         .matte-overlay {
             position: fixed;
@@ -304,6 +304,15 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
             color: var(--primary);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: var(--weight-bold);
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .grid {
@@ -583,6 +592,24 @@
         @media (max-width: 480px) {
             .image-gallery { grid-template-columns: 1fr; }
         }
+
+        /* новые стили для списков спецификаций */
+        .spec-list {
+            list-style: none;
+            padding: 0;
+        }
+        .spec-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed var(--border);
+            font-weight: var(--weight-body);
+            color: var(--secondary);
+        }
+        .spec-list li strong {
+            font-weight: var(--weight-extra);
+            color: var(--primary);
+            min-width: 180px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -594,28 +621,17 @@
     <!-- Фоновая структура — бесконечная сетка правильных шестиугольников (как соты) без параллакса, фиксированная -->
     <svg id="structure-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice">
         <defs>
-            <!-- Паттерн гексагональной сетки (пчелиные соты, flat-top) с правильными пропорциями -->
             <pattern id="hexGrid" patternUnits="userSpaceOnUse" width="120" height="104" x="0" y="0">
-                <!-- Шестиугольник с плоской вершиной (flat-top) размером: side = 60, высота = 104, ширина = 120 -->
-                <path d="M30,0 L90,0 L120,52 L90,104 L30,104 L0,52 Z" 
-                      fill="none" 
-                      stroke="#111111" 
-                      stroke-width="1.5" 
-                      opacity="0.6" 
-                      stroke-linejoin="round" 
-                      stroke-linecap="round"/>
-                <!-- Узлы (атомы) в вершинах шестиугольника -->
+                <path d="M30,0 L90,0 L120,52 L90,104 L30,104 L0,52 Z" fill="none" stroke="#111111" stroke-width="1.5" opacity="0.6" stroke-linejoin="round" stroke-linecap="round"/>
                 <circle cx="30" cy="0" r="3" fill="#111111" opacity="0.7"/>
                 <circle cx="90" cy="0" r="3" fill="#111111" opacity="0.7"/>
                 <circle cx="120" cy="52" r="3" fill="#111111" opacity="0.7"/>
                 <circle cx="90" cy="104" r="3" fill="#111111" opacity="0.7"/>
                 <circle cx="30" cy="104" r="3" fill="#111111" opacity="0.7"/>
                 <circle cx="0" cy="52" r="3" fill="#111111" opacity="0.7"/>
-                <!-- Дополнительные точки внутри для имитации атомов углерода/кремния (опционально) -->
                 <circle cx="60" cy="52" r="2" fill="#111111" opacity="0.5"/>
             </pattern>
         </defs>
-        <!-- Заливаем весь фон паттерном — он автоматически повторяется бесконечно во всех направлениях -->
         <rect width="1200" height="1200" fill="url(#hexGrid)"/>
     </svg>
     <div class="matte-overlay"></div>
@@ -650,9 +666,42 @@
             </div>
         </section>
 
+        <!-- НОВЫЙ РАЗДЕЛ: Concept Target Specifications -->
+        <section id="target-specs">
+            <div class="section-content">
+                <span class="label">01 // CONCEPT TARGET SPECIFICATIONS</span>
+                <h2 data-ru="ЦЕЛЕВЫЕ ПАРАМЕТРЫ ПРОТОТИПА" data-en="EXPERIMENTAL PROTOTYPE TARGETS" data-zh="原型目标参数" data-ar="المواصفات المستهدفة للنموذج الأولي">ЦЕЛЕВЫЕ ПАРАМЕТРЫ ПРОТОТИПА</h2>
+                <div class="info-card">
+                    <ul class="spec-list">
+                        <li><strong data-ru="Толщина (цель):" data-en="Target thickness:" data-zh="目标厚度：" data-ar="السمك المستهدف:">Толщина (цель):</strong> 12–13 mm</li>
+                        <li><strong data-ru="Масса (цель):" data-en="Target mass:" data-zh="目标质量：" data-ar="الكتلة المستهدفة:">Масса (цель):</strong> 1.5–1.7 kg</li>
+                        <li><strong data-ru="Уровень защиты (предполагаемый):" data-en="Intended protection level:" data-zh="预期防护等级：" data-ar="مستوى الحماية المقصود:">Уровень защиты (предполагаемый):</strong> BR3–BR4 (conceptual target, not certified)</li>
+                        <li><strong data-ru="Тип плиты:" data-en="Plate type:" data-zh="板类型：" data-ar="نوع اللوحة:">Тип плиты:</strong> rigid / semi-rigid composite plate</li>
+                        <li><strong data-ru="Стадия разработки:" data-en="Development stage:" data-zh="开发阶段：" data-ar="مرحلة التطوير:">Стадия разработки:</strong> experimental, laboratory-scale</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- НОВЫЙ РАЗДЕЛ: Protection Class Interpretation -->
+        <section id="protection-interpretation">
+            <div class="section-content">
+                <span class="label">02 // PROTECTION CLASS INTERPRETATION</span>
+                <h2 data-ru="ИНТЕРПРЕТАЦИЯ КЛАССОВ ЗАЩИТЫ" data-en="PROTECTION CLASS EQUIVALENCE" data-zh="防护等级对照" data-ar="تفسير فئات الحماية">ИНТЕРПРЕТАЦИЯ КЛАССОВ ЗАЩИТЫ</h2>
+                <div class="info-card">
+                    <p data-ru="Ориентировочное соответствие: Бр3–Бр4 (ГОСТ-совместимая терминология, без утверждения сертификации). Все заявленные уровни являются концептуальными целями и не подтверждены сертификационными испытаниями." 
+                       data-en="Approximate equivalence: NIJ Level III–IV (informational, not certified; CEN Level III–IV equivalent). All stated levels are conceptual targets and have not been certification tested." 
+                       data-zh="近似等效：NIJ Level III–IV（仅供参考，未经认证；相当于CEN Level III–IV）。所有所述级别均为概念目标，未经认证测试。" 
+                       data-ar="معادلة تقريبية: المستوى III–IV NIJ (معلوماتي، غير معتمد; مكافئ للمستوى III–IV CEN). جميع المستويات المذكورة هي أهداف مفاهيمية ولم تخضع لاختبارات الاعتماد.">
+                        Ориентировочное соответствие: Бр3–Бр4 (ГОСТ-совместимая терминология, без утверждения сертификации). Все заявленные уровни являются концептуальными целями и не подтверждены сертификационными испытаниями.
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <section id="research">
             <div class="section-content">
-                <span class="label">01 // R&D PROTOCOL</span>
+                <span class="label">03 // R&D PROTOCOL</span>
                 <h2 data-ru="ИНЖЕНЕРИЯ МЕЖФАЗНОГО СЛОЯ" data-en="INTERFACIAL LAYER ENGINEERING" data-zh="界面层工程" data-ar="هندسة الطبقة البينية">ИНЖЕНЕРИЯ МЕЖФАЗНОГО СЛОЯ</h2>
                 <div class="grid">
                     <div>
@@ -670,6 +719,17 @@
                     </div>
                 </div>
 
+                <!-- НОВЫЙ БЛОК: Design Philosophy (внутри research) -->
+                <div class="design-philosophy">
+                    <h3 data-ru="ФИЛОСОФИЯ ПРОЕКТИРОВАНИЯ" data-en="DESIGN PHILOSOPHY" data-zh="设计理念" data-ar="فلسفة التصميم">ФИЛОСОФИЯ ПРОЕКТИРОВАНИЯ</h3>
+                    <p data-ru="Подход основан на рассеянии энергии (energy dissipation) через гибридную слоистую архитектуру (hybrid layered architecture). Основной фокус — баланс между толщиной, массой и живучестью (balance between thickness, mass and survivability), а также изучение структурного поведения при динамическом нагружении (structural behavior under dynamic load)." 
+                       data-en="The approach is based on energy dissipation through a hybrid layered architecture. The main focus is on the balance between thickness, mass and survivability, as well as the study of structural behavior under dynamic load." 
+                       data-zh="该方法基于通过混合分层结构实现能量耗散。主要关注厚度、质量和生存能力之间的平衡，以及动态载荷下的结构行为研究。" 
+                       data-ar="يعتمد النهج على تبديد الطاقة من خلال بنية هجينة متعددة الطبقات. ينصب التركيز الرئيسي على التوازن بين السماكة والكتلة والقدرة على البقاء، بالإضافة إلى دراسة السلوك الهيكلي تحت الحمل الديناميكي.">
+                        Подход основан на рассеянии энергии (energy dissipation) через гибридную слоистую архитектуру (hybrid layered architecture). Основной фокус — баланс между толщиной, массой и живучестью (balance between thickness, mass and survivability), а также изучение структурного поведения при динамическом нагружении (structural behavior under dynamic load).
+                    </p>
+                </div>
+
                 <!-- Две картинки: базальт и SiC порошок (заменены на реальные изображения) -->
                 <div class="image-gallery">
                     <div class="gallery-item">
@@ -678,7 +738,7 @@
                     </div>
                     <div class="gallery-item">
                         <img src="micro-structure-sic-f60.jpg" alt="SiC F60 microstructure" style="width:100%; height:80%; object-fit: cover;">
-                        <div class="gallery-caption">SiC</div> <!-- только формула, без перевода -->
+                        <div class="gallery-caption">SiC</div>
                     </div>
                 </div>
             </div>
@@ -686,7 +746,7 @@
 
         <section id="tech-focus">
             <div class="section-content">
-                <span class="label">01.1 // KEY TECHNOLOGIES</span>
+                <span class="label">04 // KEY TECHNOLOGIES</span>
                 <h2 data-ru="ДИНАМИЧЕСКОЕ ДЕМПФИРОВАНИЕ И УДАРНАЯ ВЯЗКОСТЬ" data-en="DYNAMIC DAMPING & SHOCK TOUGHNESS" data-zh="动态阻尼与冲击韧性" data-ar="التخميد الديناميكي ومتانة الصدمات">ДИНАМИЧЕСКОЕ ДЕМПФИРОВАНИЕ И УДАРНАЯ ВЯЗКОСТЬ</h2>
                 <div class="grid">
                     <div>
@@ -703,10 +763,9 @@
             </div>
         </section>
 
-        <!-- Секция: Схема структуры плиты -->
         <section id="stack-schema">
             <div class="section-content">
-                <span class="label">01.2 // LAYER ARCHITECTURE</span>
+                <span class="label">05 // LAYER ARCHITECTURE</span>
                 <h2 data-ru="СТРУКТУРА ГИБРИДНОЙ ПЛИТЫ" data-en="HYBRID PLATE STRUCTURE" data-zh="混合板结构" data-ar="هيكل اللوحة الهجينة">СТРУКТУРА ГИБРИДНОЙ ПЛИТЫ</h2>
                 <div class="stack-schema">
                     <div class="stack-layer"><span class="layer-name" data-ru="1. Лицевой слой:" data-en="1. Face layer:" data-zh="1. 面层：" data-ar="1. الطبقة الأمامية:">1. Лицевой слой:</span><span class="layer-desc" data-ru="Базальт + SiC (мелкая фракция F220) с аппретированием GPTMS" data-en="Basalt + SiC (fine fraction F220) with GPTMS silanization" data-zh="玄武岩 + SiC（细粒F220），GPTMS硅烷化" data-ar="بازلت + SiC (جزء ناعم F220) مع معالجة سيلانية GPTMS">Базальт + SiC (мелкая фракция F220) с аппретированием GPTMS</span></div>
@@ -717,15 +776,48 @@
             </div>
         </section>
 
+        <!-- ОБНОВЛЕННЫЙ РАЗДЕЛ ROADMAP -->
         <section id="roadmap">
             <div class="section-content">
-                <span class="label">02 // MILESTONES</span>
+                <span class="label">06 // MILESTONES</span>
                 <h2 data-ru="ГРАФИК РЕАЛИЗАЦИИ НИОКР" data-en="R&D IMPLEMENTATION TIMELINE" data-zh="研发实施时间表" data-ar="الجدول الزمني لتنفيذ البحث">ГРАФИК РЕАЛИЗАЦИИ НИОКР</h2>
                 <div class="roadmap-container">
                     <div class="roadmap-items">
-                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Январь 2026" data-en="January 2026" data-zh="2026年1月" data-ar="يناير 2026">Январь 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Поиск материалов" data-en="Material Sourcing" data-zh="材料采购" data-ar="توفير المواد">Поиск материалов</span><div class="roadmap-description" data-ru="Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов." data-en="Analysis of high-tech raw materials market. Participation in specialized exhibitions to find suppliers of UHMWPE and ceramic components." data-zh="分析高科技原材料市场。参加专业展览寻找超高分子量聚乙烯和陶瓷组件供应商。" data-ar="تحليل سوق المواد الخام عالية التقنية. المشاركة في المعارض المتخصصة للعثور على موردي UHMWPE والمكونات الخزفية.">Анализ рынка высокотехнологичного сырья. Участие в профильных экспозициях для поиска поставщиков СВМПЭ и керамических компонентов.</div></div></div>
-                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Март 2026" data-en="March 2026" data-zh="2026年3月" data-ar="مارس 2026">Март 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Первые тесты" data-en="First tests" data-zh="首次测试" data-ar="الاختبارات الأولى">Первые тесты</span><div class="roadmap-description" data-ru="Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоёв и баллистическую стойкость." data-en="Assembly of first experimental material batches and conducting primary tests for layer adhesion strength and ballistic resistance." data-zh="组装首批实验材料批次并进行层间粘附强度和抗弹性的初步测试。" data-ar="تجميع أول دفعات تجريبية من المواد وإجراء اختبارات أولية لقوة التصاق الطبقات والمقاومة الباليستية.">Сборка первых опытных пакетов материалов и проведение первичных тестов на адгезионную прочность слоёв и баллистическую стойкость.</div></div></div>
-                        <div class="roadmap-item"><div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Июнь 2026" data-en="June 2026" data-zh="2026年6月" data-ar="يونيو 2026">Июнь 2026</div></div><div class="roadmap-content"><span class="roadmap-phase" data-ru="Баллистическая валидация" data-en="Ballistic Validation" data-zh="弹道验证" data-ar="التحقق الباليستي">Баллистическая валидация</span><div class="roadmap-description" data-ru="Лабораторные испытания в специализированных тирах для подтверждения расчётных характеристик баллистической стойкости по стандартам NIJ III+." data-en="Laboratory tests in specialized shooting ranges to confirm calculated ballistic resistance characteristics according to NIJ III+ standards." data-zh="在专业射击场进行实验室测试，以确认根据NIJ III+标准计算的弹道阻力特性。" data-ar="اختبارات معملية في ميادين رماية متخصصة لتأكيد خصائص المقاومة الباليستية المحسوبة وفقًا لمعايير NIJ III+.">Лабораторные испытания в специализированных тирах для подтверждения расчётных характеристик баллистической стойкости по стандартам NIJ III+.</div></div></div>
+                        <div class="roadmap-item">
+                            <div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Q1 2026" data-en="Q1 2026" data-zh="2026年第一季度" data-ar="الربع الأول 2026">Q1 2026</div></div>
+                            <div class="roadmap-content">
+                                <span class="roadmap-phase" data-ru="Валидация структурной концепции" data-en="Structural concept validation" data-zh="结构概念验证" data-ar="التحقق من المفهوم الهيكلي">Валидация структурной концепции</span>
+                                <div class="roadmap-description" data-ru="Анализ конечно-элементных моделей, выбор архитектуры, оценка теоретической эффективности." data-en="FEM analysis, architecture selection, theoretical efficiency assessment." data-zh="有限元分析，架构选择，理论效率评估。" data-ar="تحليل العناصر المحدودة، اختيار البنية، تقييم الكفاءة النظرية.">Анализ конечно-элементных моделей, выбор архитектуры, оценка теоретической эффективности.</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Q2 2026" data-en="Q2 2026" data-zh="2026年第二季度" data-ar="الربع الثاني 2026">Q2 2026</div></div>
+                            <div class="roadmap-content">
+                                <span class="roadmap-phase" data-ru="Тестирование энергопоглощения (не баллистика)" data-en="Non-ballistic energy absorption testing" data-zh="非弹道能量吸收测试" data-ar="اختبار امتصاص الطاقة غير الباليستي">Тестирование энергопоглощения (не баллистика)</span>
+                                <div class="roadmap-description" data-ru="Испытания на удар падающим грузом, динамический изгиб, оценка демпфирования." data-en="Drop-weight tests, dynamic bending, damping evaluation." data-zh="落锤测试，动态弯曲，阻尼评估。" data-ar="اختبارات السقوط بالثقل، الانحناء الديناميكي، تقييم التخميد.">Испытания на удар падающим грузом, динамический изгиб, оценка демпфирования.</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Q3 2026" data-en="Q3 2026" data-zh="2026年第三季度" data-ar="الربع الثالث 2026">Q3 2026</div></div>
+                            <div class="roadmap-content">
+                                <span class="roadmap-phase" data-ru="Масштабированные ударные эксперименты" data-en="Scaled impact experiments" data-zh="缩比冲击实验" data-ar="تجارب تأثير مصغرة">Масштабированные ударные эксперименты</span>
+                                <div class="roadmap-description" data-ru="Обстрел фрагментами имитаторов пуль, анализ повреждений, корреляция с моделью." data-en="Fragment simulation projectile tests, damage analysis, model correlation." data-zh="碎片模拟弹测试，损伤分析，模型相关性。" data-ar="اختبارات مقذوفات محاكاة الشظايا، تحليل الضرر، ارتباط النموذج.">Обстрел фрагментами имитаторов пуль, анализ повреждений, корреляция с моделью.</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Q4 2026" data-en="Q4 2026" data-zh="2026年第四季度" data-ar="الربع الرابع 2026">Q4 2026</div></div>
+                            <div class="roadmap-content">
+                                <span class="roadmap-phase" data-ru="Оптимизация геометрии прототипа" data-en="Prototype geometry optimization" data-zh="原型几何优化" data-ar="تحسين هندسة النموذج الأولي">Оптимизация геометрии прототипа</span>
+                                <div class="roadmap-description" data-ru="Итерации по снижению массы, улучшению эргономики, подготовка к внешним испытаниям." data-en="Mass reduction iterations, ergonomics improvement, preparation for external tests." data-zh="减重迭代，人机工程学改进，外部测试准备。" data-ar="تكرارات تقليل الكتلة، تحسين بيئة العمل، التحضير للاختبارات الخارجية.">Итерации по снижению массы, улучшению эргономики, подготовка к внешним испытаниям.</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmarker"><div class="roadmap-dot"></div><div class="roadmap-date" data-ru="Q1 2027" data-en="Q1 2027" data-zh="2027年第一季度" data-ar="الربع الأول 2027">Q1 2027</div></div>
+                            <div class="roadmap-content">
+                                <span class="roadmap-phase" data-ru="Планируемое внешнее тестирование" data-en="Planned external testing collaboration" data-zh="计划外部测试合作" data-ar="التعاون في الاختبارات الخارجية المخطط له">Планируемое внешнее тестирование</span>
+                                <div class="roadmap-description" data-ru="Взаимодействие с аккредитованными лабораториями для независимой валидации." data-en="Collaboration with accredited labs for independent validation." data-zh="与认可实验室合作进行独立验证。" data-ar="التعاون مع مختبرات معتمدة للتحقق المستقل.">Взаимодействие с аккредитованными лабораториями для независимой валидации.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -733,7 +825,7 @@
 
         <section id="materials">
             <div class="section-content">
-                <span class="label">03 // TECHNICAL REQUEST</span>
+                <span class="label">07 // TECHNICAL REQUEST</span>
                 <h2 data-ru="МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ" data-en="MATERIALS FOR VALIDATION" data-zh="待验证材料" data-ar="مواد للتحقق">МАТЕРИАЛЫ ДЛЯ АПРОБАЦИИ</h2>
 
                 <div class="materials-table">
@@ -741,17 +833,15 @@
                     <div class="material-row"><div class="material-name" data-ru="Керамические элементы" data-en="Ceramic Elements" data-zh="陶瓷组件" data-ar="عناصر خزفية">Керамические элементы</div><div class="material-spec" data-ru="Монолитные или мозаичные панели на основе Al₂O₃ чистотой не менее 98%." data-en="Monolithic or mosaic panels based on Al₂O₃ with purity of at least 98%." data-zh="基于Al₂O₃的整体或镶嵌面板，纯度不低于98%。" data-ar="ألواح متجانسة أو فسيفسائية تعتمد على Al₂O₃ بنقاوة لا تقل عن 98%.">Монолитные или мозаичные панели на основе Al₂O₃ чистотой не менее 98%.</div></div>
                     <div class="material-row"><div class="material-name" data-ru="Смоляные системы" data-en="Resin Systems" data-zh="树脂系统" data-ar="أنظمة الراتنج">Смоляные системы</div><div class="material-spec" data-ru="Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации (Этал-45М, аналоги)." data-en="Low-viscosity epoxy and polyurethane systems with high polymerization rate (Etal-45M, analogs)." data-zh="低粘度环氧树脂和聚氨酯系统，具有高聚合速率（Etal-45M等）。" data-ar="أنظمة إيبوكسي وبولي يوريثين منخفضة اللزوجة بمعدل بلمرة مرتفع (Etal-45M، نظائرها).">Низковязкие эпоксидные и полиуретановые системы с высокой скоростью полимеризации (Этал-45М, аналоги).</div></div>
                     <div class="material-row"><div class="material-name" data-ru="Арамидные ткани" data-en="Aramid Fabrics" data-zh="芳纶织物" data-ar="أقمشة أراميد">Арамидные ткани</div><div class="material-spec" data-ru="Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя." data-en="Plain weave fabrics (Ballistic Grade) for back layer reinforcement." data-zh="平纹织物（弹道级），用于背层增强。" data-ar="أقمشة بنسيج عادي (درجة باليستية) لتعزيز الطبقة الخلفية.">Ткани полотняного переплетения (Ballistic Grade) для усиления тыльного слоя.</div></div>
-                    <!-- Добавлена строка с аппретами (вместо SiC) -->
                     <div class="material-row"><div class="material-name" data-ru="Аппреты (силаны)" data-en="Coupling agents (silanes)" data-zh="偶联剂（硅烷）" data-ar="عوامل اقتران (سيلانات)">Аппреты (силаны)</div><div class="material-spec" data-ru="GPTMS (3-глицидилоксипропилтриметоксисилан) и APS (3-аминопропилтриэтоксисилан) для модификации поверхности волокон." data-en="GPTMS (3-glycidyloxypropyltrimethoxysilane) and APS (3-aminopropyltriethoxysilane) for fiber surface modification." data-zh="GPTMS（3-缩水甘油醚氧基丙基三甲氧基硅烷）和APS（3-氨基丙基三乙氧基硅烷）用于纤维表面改性。" data-ar="GPTMS (3-جليسيديلوكسي بروبيل تريميثوكسيسيلان) و APS (3-أمينوبروبيل ترايثوكسيسيلان) لتعديل سطح الألياف.">GPTMS (3-глицидилоксипропилтриметоксисилан) и APS (3-аминопропилтриэтоксисилан) для модификации поверхности волокон.</div></div>
                 </div>
                 <a href="mailto:fseleznev@icloud.com" class="cta" data-ru="СТАТЬ ПАРТНЕРОМ" data-en="BECOME PARTNER" data-zh="成为合作伙伴" data-ar="كن شريكاً">СТАТЬ ПАРТНЕРОМ</a>
             </div>
         </section>
 
-        <!-- Дополнительная секция для увеличения длины страницы (подробности об аппретах) -->
         <section id="coupling-agents">
             <div class="section-content">
-                <span class="label">03.1 // SURFACE MODIFICATION</span>
+                <span class="label">08 // SURFACE MODIFICATION</span>
                 <h2 data-ru="РОЛЬ АППРЕТОВ В МЕЖФАЗНОЙ АДГЕЗИИ" data-en="ROLE OF COUPLING AGENTS IN INTERFACIAL ADHESION" data-zh="偶联剂在界面附着力中的作用" data-ar="دور عوامل الاقتران في الالتصاق البيني">РОЛЬ АППРЕТОВ В МЕЖФАЗНОЙ АДГЕЗИИ</h2>
                 <p data-ru="Аппреты силанового ряда образуют химические мостики между неорганическим наполнителем (волокно, частицы SiC) и органической матрицей. GPTMS содержит эпоксидные группы, совместимые с эпоксидными смолами, а APS — аминогруппы, способные реагировать с отвердителями. Это увеличивает прочность сцепления на 30–50% и предотвращает деградацию свойств при динамических нагрузках." data-en="Silane coupling agents form chemical bridges between inorganic filler (fiber, SiC particles) and organic matrix. GPTMS contains epoxy groups compatible with epoxy resins, while APS has amino groups that can react with hardeners. This increases bonding strength by 30–50% and prevents property degradation under dynamic loads." data-zh="硅烷偶联剂在无机填料（纤维、SiC颗粒）和有机基体之间形成化学桥。GPTMS含有与环氧树脂相容的环氧基团，而APS具有可与固化剂反应的氨基。这将粘合强度提高30-50%，并防止动态载荷下的性能下降。" data-ar="تشكل عوامل اقتران السيلان جسورًا كيميائية بين الحشو غير العضوي (الألياف، جزيئات SiC) والمصفوفة العضوية. يحتوي GPTMS على مجموعات إيبوكسي متوافقة مع راتنجات الإيبوكسي، بينما يحتوي APS على مجموعات أمينية يمكنها التفاعل مع المقسيات. هذا يزيد من قوة الترابط بنسبة 30-50٪ ويمنع تدهور الخصائص تحت الأحمال الديناميكية.">
                     Аппреты силанового ряда образуют химические мостики между неорганическим наполнителем (волокно, частицы SiC) и органической матрицей. GPTMS содержит эпоксидные группы, совместимые с эпоксидными смолами, а APS — аминогруппы, способные реагировать с отвердителями. Это увеличивает прочность сцепления на 30–50% и предотвращает деградацию свойств при динамических нагрузках.
@@ -761,18 +851,37 @@
                 </p>
             </div>
         </section>
+
+        <!-- НОВЫЙ РАЗДЕЛ: Limitations & Transparency -->
+        <section id="limitations">
+            <div class="section-content">
+                <span class="label">09 // LIMITATIONS & TRANSPARENCY</span>
+                <h2 data-ru="ОГРАНИЧЕНИЯ И ПРОЗРАЧНОСТЬ" data-en="LIMITATIONS & TRANSPARENCY" data-zh="限制与透明度" data-ar="القيود والشفافية">ОГРАНИЧЕНИЯ И ПРОЗРАЧНОСТЬ</h2>
+                <div class="info-card">
+                    <ul class="spec-list" style="list-style: disc; padding-left: 1.5rem;">
+                        <li data-ru="Нет баллистической сертификации" data-en="No ballistic certification" data-zh="无防弹认证" data-ar="لا يوجد اعتماد باليستي">Нет баллистической сертификации</li>
+                        <li data-ru="Нет квалификации для военных или правоохранительных органов" data-en="No military or law enforcement qualification" data-zh="无军事或执法资格" data-ar="لا يوجد تأهيل عسكري أو لإنفاذ القانون">Нет квалификации для военных или правоохранительных органов</li>
+                        <li data-ru="Только лабораторные испытания" data-en="Laboratory testing only" data-zh="仅实验室测试" data-ar="اختبارات معملية فقط">Только лабораторные испытания</li>
+                        <li data-ru="Результаты могут варьироваться между образцами" data-en="Results may vary between samples" data-zh="不同样品的结果可能不同" data-ar="قد تختلف النتائج بين العينات">Результаты могут варьироваться между образцами</li>
+                        <li data-ru="Проект, основанный основателем, с ограниченными ресурсами" data-en="Founder-led resource-limited project" data-zh="创始人主导的资源有限项目" data-ar="مشروع بقيادة المؤسس ومحدود الموارد">Проект, основанный основателем, с ограниченными ресурсами</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
     </div>
 
     <footer id="contact">
         <div class="footer-col"><div class="logo">APOGEE SHELL</div><p style="margin-top:1.8rem;" data-ru="Независимая лаборатория прикладных исследований." data-en="Independent applied research laboratory." data-zh="独立应用研究实验室。" data-ar="مختبر أبحاث تطبيقية مستقل.">Независимая лаборатория прикладных исследований.</p></div>
         <div class="footer-col"><h4 data-ru="Контакты" data-en="Contacts" data-zh="联系方式" data-ar="جهات الاتصال">Контакты</h4><p>Email: fseleznev@icloud.com</p><p data-ru="Москва, Россия" data-en="Moscow, Russia" data-zh="俄罗斯，莫斯科" data-ar="موسكو، روسيا">Москва, Россия</p></div>
         <div class="footer-col"><h4 data-ru="Сайт" data-en="Web" data-zh="网站" data-ar="الموقع">Сайт</h4><p>© 2026 apogee-shell.github.io</p><p data-ru="НИОКР Подразделение" data-en="R&D Division" data-zh="研发部门" data-ar="قسم البحث والتطوير">НИОКР Подразделение</p></div>
-        <div class="disclaimer" data-ru="Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют." data-en="All current activities are conducted within the framework of scientific and educational R&D. No final products are available for sale." data-zh="所有当前活动均在科学和教育研发框架内进行。没有可供销售的最终产品。" data-ar="يتم تنفيذ جميع الأنشطة الحالية في إطار البحث والتطوير العلمي والتعليمي. لا توجد منتجات نهائية متاحة للبيع.">Все текущие мероприятия проводятся в рамках научно-образовательных НИОКР. Готовые продукты для продажи отсутствуют.</div>
+        <!-- ОБНОВЛЕННЫЙ DISCLAIMER -->
+        <div class="disclaimer" data-ru="Проект предназначен исключительно для исследовательских и экспериментальных целей и не заявляет сертифицированную баллистическую защиту." data-en="This project is intended for research and experimental purposes only and does not claim certified ballistic protection." data-zh="本项目仅用于研究和实验目的，不声明经过认证的防弹保护。" data-ar="هذا المشروع مخصص لأغراض البحث والتجربة فقط ولا يدعي حماية باليستية معتمدة.">
+            Проект предназначен исключительно для исследовательских и экспериментальных целей и не заявляет сертифицированную баллистическую защиту.
+        </div>
     </footer>
 
     <script>
         (function() {
-            // Функция обновления высоты viewport
             function updateViewportHeight() {
                 let vh = window.innerHeight * 0.01;
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -781,9 +890,6 @@
             window.addEventListener('resize', updateViewportHeight);
             window.addEventListener('orientationchange', function() { setTimeout(updateViewportHeight, 100); });
 
-            // Фон больше не двигается — удаляем параллакс (оставляем фиксированным)
-
-            // Переключение языка
             window.setLanguage = function(lang) {
                 document.documentElement.lang = lang;
                 const body = document.body;
@@ -792,7 +898,6 @@
                 } else {
                     body.setAttribute('dir', 'ltr');
                 }
-                // Обновление текстовых элементов
                 document.querySelectorAll('[data-' + lang + ']').forEach(el => {
                     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                         el.value = el.getAttribute('data-' + lang);
@@ -805,7 +910,6 @@
                 localStorage.setItem('apogee_lang', lang);
             };
 
-            // Загрузка и анимации
             window.addEventListener('load', function() {
                 setTimeout(function() {
                     document.getElementById('loader').classList.add('hidden');
@@ -825,7 +929,6 @@
                 }, 500);
             });
 
-            // Плавная прокрутка
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -840,7 +943,6 @@
                 });
             });
 
-            // Предотвращение масштабирования на iOS
             document.addEventListener('touchstart', function(e) {
                 if (e.touches.length > 1) e.preventDefault();
             }, { passive: false });
